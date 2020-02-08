@@ -7,17 +7,17 @@
 # Jordan Ovrè / Ghecko <ghecko78@gmail.com
 
 
-import errno
 import inspect
 import os
+import pathlib
 import pkg_resources
 import pkgutil
+import platform
 import re
 import requests
 import subprocess
 import tarfile
 import tempfile
-import traceback
 
 from importlib import import_module
 
@@ -153,16 +153,31 @@ class OWFUpdate:
         if filename:
             setup_dir = self._extract_tarball(filename)
             try:
-                return_code = subprocess.call(['python', 'setup.py', 'install'],
-                                              cwd=setup_dir, stdout=subprocess.DEVNULL)
-                if return_code != 0:
-                    return False
+                # On Windows, another method is needed to update the framework package.
+                if package_name != "octowire-framework" or platform.system() != "Windows":
+                    pipes = subprocess.Popen(['python', 'setup.py', 'install'], cwd=setup_dir,
+                                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    stdout, stderr = pipes.communicate()
+                    if pipes.returncode != 0:
+                        self.logger.handle("Error while installing {} package: {}".format(package_name, stderr.strip()))
+                        return False
+                    else:
+                        self.logger.handle("'{}' successfully installed".format(package_name), Logger.SUCCESS)
+                        return True
                 else:
-                    self.logger.handle("'{}' successfully installed".format(package_name), Logger.SUCCESS)
+                    # This method is necessary to update the framework. Indeed, this allows releasing the owfupdate.exe
+                    # Windows executable in order to replace it.
+                    current_dir = pathlib.Path().absolute()
+                    log_file = current_dir / "framework_install.log"
+                    os.chdir(setup_dir)
+                    os.system('START /B python setup.py install > ' + str(log_file))
+                    self.logger.handle("The framework update was launched in background... check the following "
+                                       "file to see if it was successfully updated: {}".format(str(log_file)),
+                                       self.logger.WARNING)
                     return True
-            except:
+            except subprocess.CalledProcessError as err:
                 self.logger.handle("The setup command failed for the '{}' module".format(package_name), Logger.ERROR)
-                traceback.print_exc()
+                print(err.stderr)
                 return False
         else:
             self.logger.handle("Failed to download the latest release for '{}'"
@@ -199,8 +214,6 @@ class OWFUpdate:
         :param update_framework: If True, check whether a framework update is available.
         :return: Nothing
         """
-        if update_framework:
-            self._update_framework()
         available_modules = self._get_available_modules()
         installed_modules = self._get_installed_modules()
         for name, version in available_modules.items():
@@ -210,6 +223,8 @@ class OWFUpdate:
                     self.to_update.append({"name": name, "version": version})
             else:
                 self.to_install.append({"name": name, "version": version})
+        if not self.to_update and not self.to_install:
+            self.logger.handle("Everything is up-to-date", Logger.SUCCESS)
         for module in self.to_update:
             self.logger.handle("Updating module '{}' to version {}".format(module["name"], module["version"]),
                                Logger.INFO)
@@ -224,3 +239,5 @@ class OWFUpdate:
             self.logger.handle("Unable to update/install the following package(s):", Logger.ERROR)
             for module in self.not_updated:
                 print(" - {}".format(module))
+        if update_framework:
+            self._update_framework()

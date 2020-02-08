@@ -7,6 +7,7 @@
 # Jordan Ovrè / Ghecko <ghecko78@gmail.com
 
 
+import argparse
 import ctypes
 import os
 import sys
@@ -19,6 +20,10 @@ def is_venv():
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m', '--moduleonly', help='Only update/install modules, not the framework',
+                        action="store_true")
+    args = parser.parse_args()
     try:
         is_admin = os.getuid() == 0
     except AttributeError:
@@ -30,7 +35,10 @@ def main():
     print('-----------------------------------------------------------------------')
     print('----------------Fetching and installing available modules---------------')
     print('-----------------------------------------------------------------------')
-    OWFUpdate().update(update_framework=True)
+    if args.moduleonly:
+        OWFUpdate().update(update_framework=False)
+    else:
+        OWFUpdate().update(update_framework=True)
 
 
 if __name__ == "__main__":
