@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 __authors__ = "Jordan Ovrè, Paul Duncan"
 __copyright__ = "Copyright (c) Jordan Ovrè / Paul Duncan"
 __license__ = "GPLv3"
-__version__ = "0.0.1"
+__version__ = "1.0.0"
 __contact__ = "Jordan Ovrè / Ghecko <ghecko78@gmail.com>, Paul Duncan / Eresse <eresse@dooba.io>"
 
 description = 'Octowire Framework Core'
