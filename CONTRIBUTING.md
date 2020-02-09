@@ -20,11 +20,11 @@ If you do not care to follow these rules, your contribution will be closed.
 * Do one commit for each modification/addition/improvement
 * Use explicit commit messages
 * License your code as GPLv3 clause
-* Always start a new module using the [owfmodules.skeleton](XXXXXX) base repository
+* Always start a new module using the [owfmodules.skeleton](https://bitbucket.org/octowire/owfmodules.skeleton/) base repository
 
 ## Creating a new module
 
-Create an issue on [offmodules.skeleton](XXXXXXXXXX) with these details:
+Create an issue on [owfmodules.skeleton](https://bitbucket.org/octowire/owfmodules.skeleton/) with these details:
 
 * Module name (owfmodules.CATEGORY.NAME)
 * A short description
@@ -57,7 +57,7 @@ self.meta.update({
 })
 ```
 
-2. Define necessary options (A list of dict)
+2. Define necessary options and advanced options if necessary (A list of dict)
 
 ```
 self.options = [
@@ -66,6 +66,12 @@ self.options = [
     {"Name": "Option2", "Value": "", "Required": False, "Type": "string/int/bool",
      "Description": "Option2 description", "Default": self.config["OCTOWIRE"]["read_timeout"]},
 ]
+
+# Do not erase it (it contains default advanced options)
+self.advanced_options.append(
+            {"Name": "adv_opt_name", "Value": "", "Required": True, "Type": "int",
+             "Description": "Advanced option description", "Default": ""}
+        )
 ```
 
 3. Implement the `run` method
