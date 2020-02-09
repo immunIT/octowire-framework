@@ -1,4 +1,4 @@
-[![Python 3.8](https://img.shields.io/badge/python-v3.7%7Cv3.8-blue.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/license-GPLv3-important.svg)](URL_TO_LICENSE)
+[![Python 3.8](https://img.shields.io/badge/python-v3.7%7Cv3.8-blue.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/license-GPLv3-important.svg)](LICENSE)
 
 # octowire-framework [v1.0.0]
 
@@ -92,11 +92,11 @@ Simply run `owfconsole` from a shell and follow these instructions:
 
 2. Select the correct module:
 
-```[owf] > use spi/dump_flash```
+```[owf] > use spi/flash_dump```
 
 3. Show available options
 
-```[owf] spi(dump_flash) > show options```
+```[owf] spi(flash_dump) > show options```
 
 4. Set necessary options
 
@@ -104,7 +104,7 @@ Simply run `owfconsole` from a shell and follow these instructions:
 
 5. Run the module
 
-```[owf] spi(dump_flash) > run```
+```[owf] spi(flash_dump) > run```
 
 ### How to properly remove the framework along with installed modules?
 
