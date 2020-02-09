@@ -6,6 +6,7 @@
 
 This project is a framework around the [Octowire project]().
 It provides multiple modules allowing you to work efficiently and save time on any hardware project.
+This framework is fully compatible with Linux and Windows (Not tested on MAC OS).
 
 [![asciicast]()]()
 
