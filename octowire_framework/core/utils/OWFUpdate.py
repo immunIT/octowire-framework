@@ -12,6 +12,7 @@ import os
 import pathlib
 import pkg_resources
 import pkgutil
+import platform
 import re
 import requests
 import subprocess
@@ -171,8 +172,12 @@ class OWFUpdate:
                     current_dir = pathlib.Path().absolute()
                     log_file = current_dir / "framework_install.log"
                     if os.path.isfile(setup_dir + "/update_framework.py"):
-                        subprocess.Popen([python_path, 'update_framework.py', '-p', str(os.getpid()), '-f',
-                                          str(log_file)], cwd=setup_dir, creationflags=subprocess.DETACHED_PROCESS)
+                        if platform.system() == "Windows":
+                            subprocess.Popen([python_path, 'update_framework.py', '-p', str(os.getpid()), '-f',
+                                              str(log_file)], cwd=setup_dir, creationflags=subprocess.DETACHED_PROCESS)
+                        else:
+                            subprocess.Popen([python_path, 'update_framework.py', '-p', str(os.getpid()), '-f',
+                                              str(log_file)], cwd=setup_dir)
                         self.logger.handle("The framework update was launched in background... check the following "
                                            "file to see if it was successfully updated: {}".format(str(log_file)),
                                            self.logger.WARNING)
