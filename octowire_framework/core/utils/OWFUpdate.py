@@ -12,10 +12,10 @@ import os
 import pathlib
 import pkg_resources
 import pkgutil
-import platform
 import re
 import requests
 import subprocess
+import sys
 import tarfile
 import tempfile
 
@@ -150,11 +150,12 @@ class OWFUpdate:
         :return: Bool: True if successfully installed, False otherwise.
         """
         filename = self._download_release(package_name, package_version)
+        python_path = sys.executable()
         if filename:
             setup_dir = self._extract_tarball(filename)
             try:
                 if package_name != "octowire-framework":
-                    pipes = subprocess.Popen(['python', 'setup.py', 'install'], cwd=setup_dir,
+                    pipes = subprocess.Popen([python_path, 'setup.py', 'install'], cwd=setup_dir,
                                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     stdout, stderr = pipes.communicate()
                     if pipes.returncode != 0:
@@ -170,7 +171,7 @@ class OWFUpdate:
                     current_dir = pathlib.Path().absolute()
                     log_file = current_dir / "framework_install.log"
                     if os.path.isfile(setup_dir + "/update_framework.py"):
-                        subprocess.Popen(['python3', 'update_framework.py', '-p', str(os.getpid()), '-f',
+                        subprocess.Popen([python_path, 'update_framework.py', '-p', str(os.getpid()), '-f',
                                           str(log_file)], cwd=setup_dir, creationflags=subprocess.DETACHED_PROCESS)
                         self.logger.handle("The framework update was launched in background... check the following "
                                            "file to see if it was successfully updated: {}".format(str(log_file)),

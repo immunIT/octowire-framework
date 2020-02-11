@@ -34,7 +34,7 @@ def main(pid, logfile):
                             .format(Colors.FAIL, Colors.ENDC, stderr.strip()))
                 else:
                     f.write("{}[V]{}The octowire-framework was successfully updated.\n".format(Colors.OKGREEN,
-                                                                                             Colors.ENDC))
+                                                                                               Colors.ENDC))
                 break
         else:
             f.write("{}[X]{}Timeout reached while waiting for the completion of the calling process (owfupdate)."
