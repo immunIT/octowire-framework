@@ -150,7 +150,7 @@ class OWFUpdate:
         :return: Bool: True if successfully installed, False otherwise.
         """
         filename = self._download_release(package_name, package_version)
-        python_path = sys.executable()
+        python_path = sys.executable
         if filename:
             setup_dir = self._extract_tarball(filename)
             try:
