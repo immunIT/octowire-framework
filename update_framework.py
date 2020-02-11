@@ -11,7 +11,6 @@ import time
 import psutil
 import subprocess
 from octowire.utils.Colors import Colors
-from octowire.utils.Logger import Logger
 
 
 def main(pid, logfile):
@@ -30,14 +29,14 @@ def main(pid, logfile):
                                          stderr=subprocess.PIPE)
                 stdout, stderr = pipes.communicate()
                 if pipes.returncode != 0:
-                    f.write("{}[X]{}Error while updating the octowire-framework package: {}\n"
+                    f.write("{}[X]{} Error while updating the octowire-framework package: {}\n"
                             .format(Colors.FAIL, Colors.ENDC, stderr.strip()))
                 else:
-                    f.write("{}[V]{}The octowire-framework was successfully updated.\n".format(Colors.OKGREEN,
+                    f.write("{}[V]{} The octowire-framework was successfully updated.\n".format(Colors.OKGREEN,
                                                                                                Colors.ENDC))
                 break
         else:
-            f.write("{}[X]{}Timeout reached while waiting for the completion of the calling process (owfupdate)."
+            f.write("{}[X]{} Timeout reached while waiting for the completion of the calling process (owfupdate)."
                     " Please run the 'owfupdate' command again to try to update the octowire-framework package.\n"
                     .format(Colors.FAIL, Colors.ENDC))
 
