@@ -169,7 +169,7 @@ class OWFUpdate:
                     # executable in order to replace it.
                     current_dir = pathlib.Path().absolute()
                     log_file = current_dir / "framework_install.log"
-                    if os.path.isfile(setup_dir + "update_framework.py"):
+                    if os.path.isfile(setup_dir + "/update_framework.py"):
                         subprocess.Popen(['python3', 'update_framework.py', '-p', str(os.getpid()), '-f',
                                           str(log_file)], cwd=setup_dir, creationflags=subprocess.DETACHED_PROCESS)
                         self.logger.handle("The framework update was launched in background... check the following "
