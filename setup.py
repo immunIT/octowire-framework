@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-import platform
-import time
-from setuptools import setup, find_packages
+from setuptools import find_packages
+from setuptools import setup
 
 
 __authors__ = "Jordan Ovrè, Paul Duncan"
@@ -14,10 +13,6 @@ __contact__ = "Jordan Ovrè / Ghecko <ghecko78@gmail.com>, Paul Duncan / Eresse 
 
 description = 'Octowire Framework Core'
 name = 'octowire_framework'
-
-# This sleep is necessary when the framework is install from owfupdate.exe on a Windows platform.
-if platform.system() == "Windows":
-    time.sleep(1)
 
 setup(
     name=name,
@@ -31,6 +26,7 @@ setup(
     install_requires=[
         'prompt_toolkit>=3.0.3,<4',
         'pyserial>=3.4,<4',
+        'psutil>=5.6.7'
     ],
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',

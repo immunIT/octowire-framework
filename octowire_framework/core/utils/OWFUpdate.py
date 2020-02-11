@@ -153,28 +153,33 @@ class OWFUpdate:
         if filename:
             setup_dir = self._extract_tarball(filename)
             try:
-                # On Windows, another method is needed to update the framework package.
-                if package_name != "octowire-framework" or platform.system() != "Windows":
+                if package_name != "octowire-framework":
                     pipes = subprocess.Popen(['python', 'setup.py', 'install'], cwd=setup_dir,
                                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     stdout, stderr = pipes.communicate()
                     if pipes.returncode != 0:
-                        self.logger.handle("Error while installing {} package: {}".format(package_name, stderr.strip()))
+                        self.logger.handle("Error while installing {} package: {}".format(package_name, stderr.strip()),
+                                           Logger.ERROR)
                         return False
                     else:
                         self.logger.handle("'{}' successfully installed".format(package_name), Logger.SUCCESS)
                         return True
                 else:
-                    # This method is necessary to update the framework. Indeed, this allows releasing the owfupdate.exe
-                    # Windows executable in order to replace it.
+                    # This method is necessary to update the framework. Indeed, this allows releasing the owfupdate
+                    # executable in order to replace it.
                     current_dir = pathlib.Path().absolute()
                     log_file = current_dir / "framework_install.log"
-                    os.chdir(setup_dir)
-                    os.system('START /B python setup.py install > ' + str(log_file))
-                    self.logger.handle("The framework update was launched in background... check the following "
-                                       "file to see if it was successfully updated: {}".format(str(log_file)),
-                                       self.logger.WARNING)
-                    return True
+                    if os.path.isfile(setup_dir + "update_framework.py"):
+                        subprocess.Popen(['python3', 'update_framework.py', '-p', str(os.getpid()), '-f',
+                                          str(log_file)], cwd=setup_dir, creationflags=subprocess.DETACHED_PROCESS)
+                        self.logger.handle("The framework update was launched in background... check the following "
+                                           "file to see if it was successfully updated: {}".format(str(log_file)),
+                                           self.logger.WARNING)
+                        return True
+                    else:
+                        self.logger.handle("The 'update_framework.py' file is missing from the installer package... "
+                                           "Unable to update the octowire-framework package...", self.logger.ERROR)
+                        return False
             except subprocess.CalledProcessError as err:
                 self.logger.handle("The setup command failed for the '{}' module".format(package_name), Logger.ERROR)
                 print(err.stderr)
