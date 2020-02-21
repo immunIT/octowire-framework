@@ -17,6 +17,13 @@ from octowire.utils.Colors import Colors
 from octowire.utils.Logger import Logger
 
 
+def _print_logo(logo, terminal_width):
+    centered_logo = ""
+    for line in logo.splitlines():
+        centered_logo += line.center(terminal_width)
+    print(centered_logo)
+
+
 def welcome(terminal_width):
     """
     Print the framework header.
@@ -90,25 +97,26 @@ def welcome(terminal_width):
              {}""".format(Colors.MAGENTA, Colors.ENDC)
              ]
     environ = os.environ
+    system = platform.system()
+    uname = platform.uname()
     # Check if Linux WSL or Windows but not in a Windows Terminal session
-    if (("WT_SESSION" not in environ and (("Linux" in platform.uname()[0] and "Microsoft" in platform.uname()[2]) or
-         "Windows" in platform.system()))):
-        print('\r'.join(line.center(terminal_width) for line in logos[1].splitlines()))
+    if "WT_SESSION" not in environ and (("Linux" in uname[0] and "Microsoft" in uname[2]) or "Windows" in system):
+        _print_logo(logo=logos[1], terminal_width=terminal_width)
     else:
         # Check if the distribution is a Linux system and it has the TERM environment variable (WSL or Not)
-        if "Linux" in platform.system() and "TERM" in environ:
+        if "Linux" in system and "TERM" in environ:
             # Linux without x-term256color support
             if environ["TERM"] != "xterm-256color":
-                print('\n'.join(line.center(terminal_width) for line in logos[1].splitlines()))
+                _print_logo(logo=logos[1], terminal_width=terminal_width)
             # Linux with x-term256color support
             else:
-                print('\n'.join(line.center(terminal_width) for line in logos[0].splitlines()))
+                _print_logo(logo=logos[0], terminal_width=terminal_width)
         # Windows in a Windows Terminal session
-        elif "Windows" in platform.system():
-            print('\n'.join(line.center(terminal_width) for line in logos[0].splitlines()))
+        elif "Windows" in system:
+            _print_logo(logo=logos[0], terminal_width=terminal_width)
         # Other
         else:
-            print('\n'.join(line.center(terminal_width) for line in logos[1].splitlines()))
+            _print_logo(logo=logos[1], terminal_width=terminal_width)
 
 
 def main():
