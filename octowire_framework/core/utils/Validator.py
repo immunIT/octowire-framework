@@ -7,6 +7,8 @@
 # Jordan Ovrè / Ghecko <ghecko78@gmail.com
 
 
+import os
+
 from octowire.utils.Logger import Logger
 
 
@@ -36,6 +38,14 @@ class Validator:
                             option["Value"] = True
                         else:
                             raise ValueError
+                # File to read
+                if option["type"] == "file_r":
+                    if not os.access(option["Value"], os.R_OK):
+                        raise Exception("{}: not existing file or permission denied.".format(option["Value"]))
+                # File to write
+                if option["type"] == "file_w":
+                    if not os.access(os.path.dirname(option["Value"]), os.W_OK):
+                        raise Exception("{}: permission denied.".format(option["Value"]))
                 if option["Value"] == "None":
                     option["Value"] = None
             except ValueError:
