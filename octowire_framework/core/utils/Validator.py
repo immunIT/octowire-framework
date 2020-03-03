@@ -30,7 +30,10 @@ class Validator:
                 if option["Type"] == "int":
                     if not isinstance(option["Value"], int):
                         option["Value"] = int(option["Value"], 10)
-                if option["Type"] == "bool":
+                elif option["Type"] == "hex":
+                    if not isinstance(option["Value"], int):
+                        option["Value"] = int(option["Value"], 16)
+                elif option["Type"] == "bool":
                     if not isinstance(option["Value"], bool):
                         if str(option["Value"]).upper() == "FALSE":
                             option["Value"] = False
@@ -39,14 +42,14 @@ class Validator:
                         else:
                             raise ValueError
                 # File to read
-                if option["type"] == "file_r":
+                elif option["type"] == "file_r":
                     if not os.access(option["Value"], os.R_OK):
                         raise Exception("{}: not existing file or permission denied.".format(option["Value"]))
                 # File to write
-                if option["type"] == "file_w":
+                elif option["type"] == "file_w":
                     if not os.access(os.path.dirname(option["Value"]), os.W_OK):
                         raise Exception("{}: permission denied.".format(option["Value"]))
-                if option["Value"] == "None":
+                if option["Value"].upper() == "NONE":
                     option["Value"] = None
             except ValueError:
                 self.logger.handle("Value error: {} is not a valid {}".format(option["Name"], option["Type"]))
