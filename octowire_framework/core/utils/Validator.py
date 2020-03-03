@@ -40,11 +40,11 @@ class Validator:
                         elif str(option["Value"]).upper() == "TRUE":
                             option["Value"] = True
                         else:
-                            raise ValueError
+                            raise ValueError("option {}: True or False are expected.".format(option["Value"]))
                 # File to read
                 elif option["type"] == "file_r":
                     if not os.access(option["Value"], os.R_OK):
-                        raise Exception("{}: not existing file or permission denied.".format(option["Value"]))
+                        raise Exception("{}: file does not exist or permission denied.".format(option["Value"]))
                 # File to write
                 elif option["type"] == "file_w":
                     if not os.access(os.path.dirname(option["Value"]), os.W_OK):
