@@ -49,7 +49,7 @@ class Validator:
                 elif option["type"] == "file_w":
                     if not os.access(os.path.dirname(option["Value"]), os.W_OK):
                         raise Exception("{}: permission denied.".format(option["Value"]))
-                if option["Value"].upper() == "NONE":
+                if option["Value"] == "None":
                     option["Value"] = None
             except ValueError:
                 self.logger.handle("Value error: {} is not a valid {}".format(option["Name"], option["Type"]))
