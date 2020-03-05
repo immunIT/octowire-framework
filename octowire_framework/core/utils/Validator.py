@@ -47,7 +47,9 @@ class Validator:
                         raise Exception("{}: file does not exist or permission denied.".format(option["Value"]))
                 # File to write
                 elif option["Type"] == "file_w":
-                    if not os.access(os.path.dirname(option["Value"]), os.W_OK):
+                    dirname = os.path.dirname(option["Value"])
+                    dirname = './' if dirname == '' else dirname
+                    if not os.access(dirname, os.W_OK):
                         raise Exception("{}: permission denied.".format(option["Value"]))
                 if option["Value"] == "None":
                     option["Value"] = None
