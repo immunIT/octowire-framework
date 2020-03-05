@@ -19,13 +19,16 @@ def run_module(owf_instance, *args):
     :return: Nothing
     """
     if isinstance(owf_instance.current_module, AModule):
-        opt_checked = Validator().check_args(owf_instance.current_module.options)
-        adv_checked = Validator().check_args(owf_instance.current_module.advanced_options)
-        if opt_checked and adv_checked:
-            try:
-                owf_instance.current_module.run()
-            except KeyboardInterrupt:
-                pass
-            except:
-                owf_instance.logger.handle("Error running module", Logger.ERROR)
-                traceback.print_exc()
+        try:
+            opt_checked = Validator().check_args(owf_instance.current_module.options)
+            adv_checked = Validator().check_args(owf_instance.current_module.advanced_options)
+            if opt_checked and adv_checked:
+                try:
+                    owf_instance.current_module.run()
+                except KeyboardInterrupt:
+                    pass
+        except (ValueError, Exception) as err:
+            owf_instance.logger.handle(err, Logger.ERROR)
+        except:
+            owf_instance.logger.handle("Error running module", Logger.ERROR)
+            traceback.print_exc()
