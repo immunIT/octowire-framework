@@ -29,6 +29,8 @@ class AModule(ABC):
         }
         self.options = []
         self.advanced_options = [
+            {"Name": "detect_octowire", "Value": "", "Required": True, "Type": "bool",
+             "Description": "Detect and connect octowire hardware", "Default": True},
             {"Name": "octowire", "Value": "", "Required": True, "Type": "string",
              "Description": "Octowire hardware serial port", "Default": self.config["OCTOWIRE"]["port"]},
             {"Name": "baudrate", "Value": "", "Required": True, "Type": "int",
@@ -50,7 +52,7 @@ class AModule(ABC):
         Connect to the Octowire using configured options.
         :return: Nothing
         """
-        if self.get_option_value("detect_octowire"):
+        if self.get_advanced_option_value("detect_octowire"):
             self.owf_serial = self._manage_connection()
         else:
             port = self.get_advanced_option_value("octowire")
