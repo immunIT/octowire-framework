@@ -12,7 +12,7 @@ hex_keycodes = {
     "RETURN": 0x0D,  # ENTER key
     "SHIFT": 0x10,  # SHIFT key
     "CONTROL": 0x11,  # CTRL key
-    "MENU": 0x12,  # ALT key
+    "ALT": 0x12,  # ALT key
     "PAUSE": 0x13,  # PAUSE key
     "CAPITAL": 0x14,  # CAPS LOCK key
     "KANA": 0x15,  # IME Kana mode

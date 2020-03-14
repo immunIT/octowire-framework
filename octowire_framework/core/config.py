@@ -9,6 +9,7 @@
 
 import configparser
 import platform
+import sys
 from pathlib import Path
 
 from octowire.utils.serial_utils import detect_octowire
@@ -24,10 +25,10 @@ def create_default_config(config, owf_dir, owf_config_path):
     """
     if not owf_dir.is_dir():
         owf_dir.mkdir()
-    port = detect_octowire()
+    port = detect_octowire(verbose=False)
     if port:
         config['OCTOWIRE'] = {
-            'port': '/dev/ttyACM0',
+            'port': port,
             'baudrate': '7372800',
             'read_timeout': 1
         }
@@ -45,9 +46,9 @@ def create_default_config(config, owf_dir, owf_config_path):
         'raw': False,
         'quiet': False,
         'exit_char': 0x1b,
-        'menu_char': 0x70,
-        'serial_port_encoding': 'UTF-8',
-        'eol': 'CR'
+        'menu_char': 0x00 if "Windows" in platform.system() else 0x70,
+        'serial_port_encoding': sys.getdefaultencoding(),
+        'eol': 'CRLF'
     }
     config['THEME'] = {
         'user_input': '',
