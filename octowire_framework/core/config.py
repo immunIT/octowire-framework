@@ -40,7 +40,7 @@ def create_default_config(config, owf_dir, owf_config_path):
         }
     config['MINITERM'] = {
         'parity': 'N',
-        'xonxoff': False,
+        'xonxoff': True,
         'echo': False,
         'filters': 'default',
         'raw': False,
@@ -48,7 +48,7 @@ def create_default_config(config, owf_dir, owf_config_path):
         'exit_char': 0x1b,
         'menu_char': 0x00 if "Windows" in platform.system() else 0x70,
         'serial_port_encoding': sys.getdefaultencoding(),
-        'eol': 'CRLF'
+        'eol': 'CR'
     }
     config['THEME'] = {
         'user_input': '',
