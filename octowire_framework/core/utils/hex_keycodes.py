@@ -1,32 +1,36 @@
 # Keyboard hex code from https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes?redirectedfrom=MSDN
 hex_keycodes = {
-    "LBUTTON": 0x01,  # Left mouse button
-    "RBUTTON": 0x02,  # Right mouse button
-    "CANCEL": 0x03,  # Control-break processing
-    "MBUTTON": 0x04,  # Middle mouse button (three-button mouse)
-    "XBUTTON1": 0x05,  # X1 mouse button
-    "XBUTTON2": 0x06,  # X2 mouse button
-    "BACKSPACE": 0x08,  # BACKSPACE key
-    "TAB": 0x09,  # TAB key
-    "CLEAR": 0x0C,  # CLEAR key
-    "RETURN": 0x0D,  # ENTER key
-    "SHIFT": 0x10,  # SHIFT key
-    "CONTROL": 0x11,  # CTRL key
-    "ALT": 0x12,  # ALT key
-    "PAUSE": 0x13,  # PAUSE key
-    "CAPITAL": 0x14,  # CAPS LOCK key
-    "KANA": 0x15,  # IME Kana mode
-    "HANGUEL": 0x15,  # IME Hanguel mode (maintained for compatibility; use HANGUL)
-    "HANGUL": 0x15,  # IME Hangul mode
-    "JUNJA": 0x17,  # IME Junja mode
-    "FINAL": 0x18,  # IME final mode
-    "HANJA": 0x19,  # IME Hanja mode
-    "KANJI": 0x19,  # IME Kanji mode
-    "ESCAPE": 0x1B,  # ESC key
-    "CONVERT": 0x1C,  # IME convert
-    "NONCONVERT": 0x1D,  # IME nonconvert
-    "ACCEPT": 0x1E,  # IME accept
-    "MODECHANGE": 0x1F,  # IME mode change request
+    "CTRL+A": 0x01,
+    "CTRL+B": 0x02,
+    "CTRL+C": 0x03,
+    "CTRL+D": 0x04,
+    "CTRL+E": 0x05,
+    "CTRL+F": 0x06,
+    "CTRL+G": 0x07,
+    "CTRL+H": 0x08,
+    "CTRL+I": 0x09,
+    "CTRL+J": 0x0A,
+    "CTRL+K": 0x0B,
+    "CTRL+L": 0x0C,
+    "CTRL+M": 0x0D,
+    "CTRL+N": 0x0E,
+    "CTRL+O": 0x0F,
+    "CTRL+P": 0x10,
+    "CTRL+Q": 0x11,
+    "CTRL+R": 0x12,
+    "CTRL+S": 0x13,
+    "CTRL+T": 0x14,
+    "CTRL+U": 0x15,
+    "CTRL+V": 0x16,
+    "CTRL+W": 0x17,
+    "CTRL+X": 0x18,
+    "CTRL+Y": 0x19,
+    "CTRL+Z": 0x1A,
+    "ESCAPE|CTRL+[": 0x1B,  # ESC key
+    "CTRL+\\": 0x1C,
+    "CTRL+]": 0x1D,
+    "CTRL+^": 0x1E,
+    "CTRL+_": 0x1F,
     "SPACE": 0x20,  # SPACEBAR
     "PRIOR": 0x21,  # PAGE UP key
     "NEXT": 0x22,  # PAGE DOWN key
