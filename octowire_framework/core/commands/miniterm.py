@@ -8,11 +8,10 @@
 import configparser
 import platform
 import serial
-import sys
 
 from octowire.utils.Logger import Logger
 from octowire_framework.core.utils.hex_keycodes import hex_keycodes
-from serial.tools.miniterm import Miniterm
+from octowire_framework.core.utils.miniterm import Miniterm
 
 
 def key_description(character):
@@ -90,7 +89,7 @@ def miniterm(owf_instance=None, *args):
     mt.set_tx_encoding(miniterm_cfg['serial_port_encoding'])
 
     if not config.getboolean('MINITERM', 'quiet'):
-        sys.stderr.write('--- Miniterm on {p.name} {p.baudrate},{p.bytesize},{p.parity},{p.stopbits} ---\n'.format(
+        Logger().handle('--- Miniterm on {p.name} {p.baudrate},{p.bytesize},{p.parity},{p.stopbits} ---\n'.format(
             p=mt.serial))
 
     toolbar = '--- Quit: <{}> | Menu: <{}> | Help: <{}> followed by <{}> ---\n'.format(
@@ -106,6 +105,6 @@ def miniterm(owf_instance=None, *args):
     except KeyboardInterrupt:
         pass
     if not config.getboolean('MINITERM', 'quiet'):
-        sys.stderr.write('\n--- exit ---\n')
+        Logger().handle('\n--- exit ---\n')
     mt.join()
     mt.close()
