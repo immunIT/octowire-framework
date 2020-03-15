@@ -134,8 +134,9 @@ class AModule(ABC):
                             'Description': option["Description"]
                         }
                     )
-            self.logger.print_tabulate(formatted_options, headers={"Name": "Name", "Description": "Description",
-                                                                   "Value": "Value", "Required": "Required"})
+            self.logger.print_tabulate(formatted_options, headers={"Name": "Name", "Value": "Value",
+                                                                   "Required": "Required",
+                                                                   "Description": "Description"})
 
     def show_advanced_options(self):
         """
@@ -163,8 +164,9 @@ class AModule(ABC):
                             'Description': option["Description"]
                         }
                     )
-            self.logger.print_tabulate(formatted_options, headers={"Name": "Name", "Description": "Description",
-                                                                   "Value": "Value", "Required": "Required"})
+            self.logger.print_tabulate(formatted_options, headers={"Name": "Name", "Value": "Value",
+                                                                   "Required": "Required",
+                                                                   "Description": "Description"})
 
     def print_meta(self):
         """
