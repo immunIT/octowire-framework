@@ -5,6 +5,7 @@
 # Jordan Ovrè / Ghecko <ghecko78@gmail.com
 
 
+import serial
 import traceback
 from octowire_framework.core.utils.Validator import Validator
 from octowire_framework.module.AModule import AModule
@@ -25,6 +26,9 @@ def run_module(owf_instance, *args):
             if opt_checked and adv_checked:
                 try:
                     owf_instance.current_module.run()
+                    # Close the serial instance after module completion
+                    if isinstance(owf_instance.current_module.owf_serial, serial.Serial):
+                        owf_instance.current_module.owf_serial.close()
                 except KeyboardInterrupt:
                     pass
         except (ValueError, Exception) as err:
