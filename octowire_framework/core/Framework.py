@@ -172,8 +172,8 @@ class Framework:
                         if inspect.isclass(obj) and issubclass(obj, AModule) and obj is not AModule:
                             module_path = module.replace('owfmodules.', '').replace('.', '/')
                             modules.append({"path": module_path, "class": obj})
-                except ImportError:
-                    self.logger.handle('Error while dynamically importing package "{}"...'.format(module), Logger.ERROR)
+                except ImportError as err:
+                    self.logger.handle('Unable to import package "{}":  {}...'.format(module, err), Logger.ERROR)
         self.logger.handle("{} modules loaded, run 'owfupdate' command to install the latest modules"
                            .format(len(modules)), Logger.USER_INTERACT)
         return modules
