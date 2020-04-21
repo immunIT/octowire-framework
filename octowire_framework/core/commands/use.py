@@ -44,6 +44,7 @@ def use(owf_instance, *args):
     if _check_args(owf_instance, *args):
         for module in owf_instance.modules:
             if module["path"] == args[0]:
+                # Save current module in the history before switching
                 if owf_instance.current_module is not None and owf_instance.current_module_name != module["path"]:
                     owf_instance.modules_history.append({"path": owf_instance.current_module_name,
                                                          "class": owf_instance.current_module})
