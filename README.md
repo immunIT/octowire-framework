@@ -1,4 +1,4 @@
-[![Python 3.7+](https://img.shields.io/badge/python-v3.7+-blue.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/license-GPLv3-important.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-v3.8+-blue.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/license-GPLv3-important.svg)](LICENSE)
 
 # octowire-framework [v1.0.0]
 
@@ -13,7 +13,7 @@ To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](
 
 ## Requirements
 
-Python 3.7+
+Python 3.8+
 
 ## Installation
 
