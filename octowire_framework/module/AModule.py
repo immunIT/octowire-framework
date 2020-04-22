@@ -30,17 +30,20 @@ class AModule(ABC):
             'description': '',
             'author': ''
         }
-        self.options = []
-        self.advanced_options = [
-            {"Name": "detect_octowire", "Value": "", "Required": True, "Type": "bool",
-             "Description": "Detect and connect octowire hardware", "Default": True},
-            {"Name": "octowire", "Value": "", "Required": True, "Type": "string",
-             "Description": "Octowire hardware serial port", "Default": self.config["OCTOWIRE"]["port"]},
-            {"Name": "baudrate", "Value": "", "Required": True, "Type": "int",
-             "Description": "Octowire serial baudrate", "Default": self.config["OCTOWIRE"]["baudrate"]},
-            {"Name": "timeout", "Value": "", "Required": True, "Type": "int",
-             "Description": "Octowire read timeout", "Default": self.config["OCTOWIRE"]["read_timeout"]},
-        ]
+        self.options = {}
+        self.advanced_options = {
+            "detect_octowire": {"Value": "", "Required": True, "Type": "bool",
+                                "Description": "Detect and connect octowire hardware", "Default": True},
+            "octowire_port": {"Value": "", "Required": True, "Type": "string",
+                              "Description": "Octowire hardware serial port",
+                              "Default": self.config["OCTOWIRE"]["port"]},
+            "octowire_baudrate": {"Value": "", "Required": True, "Type": "int",
+                                  "Description": "Octowire serial baudrate",
+                                  "Default": self.config["OCTOWIRE"]["baudrate"]},
+            "octowire_timeout": {"Value": "", "Required": True, "Type": "int",
+                                 "Description": "Octowire read timeout",
+                                 "Default": self.config["OCTOWIRE"]["read_timeout"]},
+        }
         self.dependencies = []
 
     def __name__(self):
@@ -90,12 +93,12 @@ class AModule(ABC):
         :return: Nothing
         """
         if not isinstance(self.owf_serial, serial.Serial):
-            if self.get_advanced_option_value("detect_octowire"):
+            if self.advanced_options["detect_octowire"]["Value"]:
                 self.owf_serial = self._manage_connection()
             else:
-                port = self.get_advanced_option_value("octowire")
-                baudrate = self.get_advanced_option_value("baudrate")
-                timeout = self.get_advanced_option_value("timeout")
+                port = self.advanced_options["octowire_port"]["Value"]
+                baudrate = self.advanced_options["octowire_baudrate"]["Value"]
+                timeout = self.advanced_options["octowire_timeout"]["Value"]
                 self.owf_serial = self._manage_connection(auto_connect=False, octowire_port=port,
                                                           octowire_baudrate=baudrate, octowire_timeout=timeout)
 
@@ -145,19 +148,19 @@ class AModule(ABC):
         else:
             raise UserWarning("Value {} not found in module options".format(option_name))
 
-    def show_options(self):
+    def show_options(self, options):
         """
         Print available options for the module to the console.
         :return: Nothing
         """
         formatted_options = []
-        if len(self.options) > 0:
+        if len(options) > 0:
             self.print_meta()
-            for option in self.options:
+            for option_name, option in options.items():
                 if option["Default"] != "" and option["Value"] == "":
                     formatted_options.append(
                         {
-                            'Name': option["Name"],
+                            'Name': option_name,
                             'Value': option["Default"],
                             'Required': option["Required"],
                             'Description': option["Description"]
@@ -166,37 +169,7 @@ class AModule(ABC):
                 else:
                     formatted_options.append(
                         {
-                            'Name': option["Name"],
-                            'Value': option["Value"],
-                            'Required': option["Required"],
-                            'Description': option["Description"]
-                        }
-                    )
-            self.logger.print_tabulate(formatted_options, headers={"Name": "Name", "Value": "Value",
-                                                                   "Required": "Required",
-                                                                   "Description": "Description"})
-
-    def show_advanced_options(self):
-        """
-        Print available advanced options for the module to the console.
-        :return: Nothing
-        """
-        formatted_options = []
-        if len(self.advanced_options) > 0:
-            for option in self.advanced_options:
-                if option["Default"] != "" and option["Value"] == "":
-                    formatted_options.append(
-                        {
-                            'Name': option["Name"],
-                            'Value': option["Default"],
-                            'Required': option["Required"],
-                            'Description': option["Description"]
-                        }
-                    )
-                else:
-                    formatted_options.append(
-                        {
-                            'Name': option["Name"],
+                            'Name': option_name,
                             'Value': option["Value"],
                             'Required': option["Required"],
                             'Description': option["Description"]

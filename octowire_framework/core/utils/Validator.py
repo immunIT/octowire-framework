@@ -19,43 +19,42 @@ class Validator:
     def __init__(self):
         self.logger = Logger()
 
-    def _args_validator(self, options_dict):
+    def _args_validator(self, option):
         """
         Check argument type validity & convert to the specified format.
-        :param options_dict: Module options dictionary.
+        :param option: Module option.
         :return: bool
         """
-        for option in options_dict:
-            try:
-                if option["Type"] == "int":
-                    if not isinstance(option["Value"], int):
-                        option["Value"] = int(option["Value"], 10)
-                elif option["Type"] == "hex":
-                    if not isinstance(option["Value"], int):
-                        option["Value"] = int(option["Value"], 16)
-                elif option["Type"] == "bool":
-                    if not isinstance(option["Value"], bool):
-                        if str(option["Value"]).upper() == "FALSE":
-                            option["Value"] = False
-                        elif str(option["Value"]).upper() == "TRUE":
-                            option["Value"] = True
-                        else:
-                            raise ValueError("option {}: True or False are expected.".format(option["Value"]))
-                # File to read
-                elif option["Type"] == "file_r":
-                    if not os.access(option["Value"], os.R_OK):
-                        raise Exception("{}: file does not exist or permission denied.".format(option["Value"]))
-                # File to write
-                elif option["Type"] == "file_w":
-                    dirname = os.path.dirname(option["Value"])
-                    dirname = './' if dirname == '' else dirname
-                    if not os.access(dirname, os.W_OK):
-                        raise Exception("{}: permission denied.".format(option["Value"]))
-                if option["Value"] == "None":
-                    option["Value"] = None
-            except ValueError:
-                self.logger.handle("Value error: {} is not a valid {}".format(option["Name"], option["Type"]))
-                return False
+        try:
+            if option["Type"] == "int":
+                if not isinstance(option["Value"], int):
+                    option["Value"] = int(option["Value"], 10)
+            elif option["Type"] == "hex":
+                if not isinstance(option["Value"], int):
+                    option["Value"] = int(option["Value"], 16)
+            elif option["Type"] == "bool":
+                if not isinstance(option["Value"], bool):
+                    if str(option["Value"]).upper() == "FALSE":
+                        option["Value"] = False
+                    elif str(option["Value"]).upper() == "TRUE":
+                        option["Value"] = True
+                    else:
+                        raise ValueError("option {}: True or False are expected.".format(option["Value"]))
+            # File to read
+            elif option["Type"] == "file_r":
+                if not os.access(option["Value"], os.R_OK):
+                    raise Exception("{}: file does not exist or permission denied.".format(option["Value"]))
+            # File to write
+            elif option["Type"] == "file_w":
+                dirname = os.path.dirname(option["Value"])
+                dirname = './' if dirname == '' else dirname
+                if not os.access(dirname, os.W_OK):
+                    raise Exception("{}: permission denied.".format(option["Value"]))
+            if option["Value"] == "None":
+                option["Value"] = None
+        except ValueError:
+            self.logger.handle("Value error: {} is not a valid {}".format(option["Name"], option["Type"]))
+            return False
         return True
 
     def check_args(self, options_dict):
@@ -73,6 +72,6 @@ class Validator:
                         return False
                     else:
                         option["Value"] = option["Default"]
-            if not self._args_validator(options_dict):
-                return False
+                if not self._args_validator(option):
+                    return False
         return True

@@ -20,4 +20,5 @@ def back(owf_instance, *args):
         if owf_instance.current_module is not None:
             owf_instance.current_module = None
             owf_instance.current_module_name = None
+    owf_instance.update_set_global_completer()
     owf_instance.update_completer_options_list()

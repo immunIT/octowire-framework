@@ -22,18 +22,18 @@ def set_options(owf_instance, *args):
     else:
         if isinstance(owf_instance.current_module, AModule):
             # Standard options
-            for option in owf_instance.current_module.options:
-                if option["Name"].upper() == args[0].upper():
+            for option_name, option in owf_instance.current_module.options.items():
+                if option_name.upper() == args[0].upper():
                     option["Value"] = args[1]
-                    msg = "{} ==> {}".format(option["Name"], args[1])
+                    msg = "{} ==> {}".format(option_name, args[1])
                     owf_instance.logger.handle(msg)
                     break
             else:
                 # Advanced options
-                for option in owf_instance.current_module.advanced_options:
-                    if option["Name"].upper() == args[0].upper():
+                for option_name, option in owf_instance.current_module.advanced_options.items():
+                    if option_name.upper() == args[0].upper():
                         option["Value"] = args[1]
-                        msg = "{} ==> {}".format(option["Name"], args[1])
+                        msg = "{} ==> {}".format(option_name, args[1])
                         owf_instance.logger.handle(msg)
                         break
                 else:

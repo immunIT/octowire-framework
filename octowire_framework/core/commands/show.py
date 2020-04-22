@@ -71,7 +71,9 @@ def show(owf_instance, *args):
                 print(f"{key} ==> {value}")
         elif args[0] == "options":
             if isinstance(owf_instance.current_module, AModule):
-                owf_instance.current_module.show_options()
-        else:
+                owf_instance.current_module.show_options(owf_instance.current_module.options)
+        elif args[0] == "advanced":
             if isinstance(owf_instance.current_module, AModule):
-                owf_instance.current_module.show_advanced_options()
+                owf_instance.current_module.show_options(owf_instance.current_module.advanced_options)
+        else:
+            _print_usage(owf_instance)

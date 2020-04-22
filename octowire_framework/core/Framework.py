@@ -133,22 +133,33 @@ class Framework:
         """
         options = {}
         if isinstance(self.current_module, AModule):
-            for option in self.current_module.options:
-                options.update({option["Name"]: None})
+            for option_name, _ in self.current_module.options.items():
+                options.update({option_name: None})
         self.completer_nested_dict["set"] = options
         self.completer_nested_dict["unset"] = options
         self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
 
-    def update_completer_global_options_list(self):
+    def update_unset_global_completer(self):
         """
-        Update prompt completer global options list when loading a new module.
+        Update prompt completer for the unsetg command.
         :return: Nothing
         """
         options = {}
-        for keys, _ in self.global_options.items():
-            options.update({keys: None})
-        self.completer_nested_dict["setg"] = options
+        for option_name, _ in self.global_options.items():
+            options.update({option_name: None})
         self.completer_nested_dict["unsetg"] = options
+        self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
+
+    def update_set_global_completer(self):
+        """
+        Update prompt completer for the setg command.
+        :return:
+        """
+        options = {}
+        if self.current_module is not None:
+            for module_option_name, module_option in self.current_module.options.items():
+                options.update({module_option_name: None})
+        self.completer_nested_dict["setg"] = options
         self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
 
 

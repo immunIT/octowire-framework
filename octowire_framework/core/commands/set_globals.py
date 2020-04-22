@@ -24,7 +24,7 @@ def set_globals(owf_instance, *args):
         msg = "{} ==> {}".format(args[0].upper(), args[1])
         owf_instance.logger.handle(msg)
         if isinstance(owf_instance.current_module, AModule):
-            for option in owf_instance.current_module.options:
-                if option["Name"].upper() == args[0].upper():
+            for option_name, option in owf_instance.current_module.options.items():
+                if option_name.upper() == args[0].upper():
                     option["Value"] = args[1]
-        owf_instance.update_completer_global_options_list()
+        owf_instance.update_unset_global_completer()

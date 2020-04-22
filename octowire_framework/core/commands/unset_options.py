@@ -21,17 +21,17 @@ def unset_options(owf_instance, *args):
         owf_instance.logger.handle("Usage: unset option_name", Logger.INFO)
     else:
         if isinstance(owf_instance.current_module, AModule):
-            for option in owf_instance.current_module.options:
-                if option["Name"].upper() == args[0].upper():
+            for option_name, option in owf_instance.current_module.options.items():
+                if option_name.upper() == args[0].upper():
                     option["Value"] = ""
-                    msg = "{} ==> ".format(option["Name"])
+                    msg = "{} ==> ".format(option_name)
                     owf_instance.logger.handle(msg)
                     break
             else:
-                for option in owf_instance.current_module.advanced_options:
-                    if option["Name"].upper() == args[0].upper():
+                for option_name, option in owf_instance.current_module.advanced_options.items():
+                    if option_name.upper() == args[0].upper():
                         option["Value"] = ""
-                        msg = "{} ==> ".format(option["Name"])
+                        msg = "{} ==> ".format(option_name)
                         owf_instance.logger.handle(msg)
                         break
                 else:

@@ -23,7 +23,7 @@ def unset_globals(owf_instance, *args):
             owf_instance.global_options.pop(args[0].upper())
             msg = "'{}' successfully unset".format(args[0].upper())
             owf_instance.logger.handle(msg)
-            owf_instance.update_completer_global_options_list()
+            owf_instance.update_unset_global_completer()
         except KeyError:
             owf_instance.logger.handle("'{}' is not declared as a global variable".format(args[0]), Logger.ERROR)
 

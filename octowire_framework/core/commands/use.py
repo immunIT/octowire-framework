@@ -5,6 +5,8 @@
 # Jordan Ovrè / Ghecko <ghecko78@gmail.com
 
 
+from prompt_toolkit.completion.nested import NestedCompleter
+
 from octowire.utils.Logger import Logger
 
 
@@ -55,10 +57,12 @@ def use(owf_instance, *args):
                     owf_instance.current_module_name = module["path"]
                     # Set module option from global option
                     for global_option_name, global_option_value in owf_instance.global_options.items():
-                        for module_option in owf_instance.current_module.options:
-                            if global_option_name.upper() == module_option["Name"].upper():
+                        for module_option_name, module_option in owf_instance.current_module.options.items():
+                            if global_option_name.upper() == module_option_name.upper():
                                 module_option["Value"] = global_option_value
                     owf_instance.update_completer_options_list()
+                    # Update global option completer
+                    owf_instance.update_set_global_completer()
                 break
         else:
             owf_instance.logger.handle("Module not found", Logger.ERROR)
