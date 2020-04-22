@@ -66,8 +66,8 @@ class Validator:
         """
         if len(options_dict) > 0:
             for option in options_dict:
-                if option["Required"] and option["Value"] == "":
-                    if option["Default"] == "":
+                if option["Value"] == "":
+                    if option["Default"] == "" and option["Required"]:
                         self.logger.handle("OptionValidationError: The following options failed to validate: {}."
                                            .format(option["Name"]), Logger.ERROR)
                         return False

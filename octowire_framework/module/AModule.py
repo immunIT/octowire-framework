@@ -7,17 +7,20 @@
 # Jordan Ovrè / Ghecko <ghecko78@gmail.com
 
 
+import pkg_resources
 import serial
 
 from abc import ABC, abstractmethod
+from importlib import import_module
 
 from octowire.utils.Logger import Logger
 from octowire.utils.serial_utils import detect_and_connect
+from octowire_framework.core.config import load_config
+from octowire_framework.core.utils.get_amodule_class import get_amodule_class
 
 
 class AModule(ABC):
     def __init__(self, owf_config):
-        self.name = None
         self.logger = Logger()
         self.config = owf_config
         self.owf_serial = None
@@ -38,6 +41,7 @@ class AModule(ABC):
             {"Name": "timeout", "Value": "", "Required": True, "Type": "int",
              "Description": "Octowire read timeout", "Default": self.config["OCTOWIRE"]["read_timeout"]},
         ]
+        self.dependencies = []
 
     def __name__(self):
         """
@@ -45,21 +49,55 @@ class AModule(ABC):
         :return: Module name
         :rtype: string
         """
-        return self.name
+        return self.meta["name"]
+
+    def _check_dependencies(self):
+        """
+        Verify the module dependencies.
+        :return: Bool
+        """
+        update_msg = "Please run 'owfupdate' in your terminal to install the latest module version"
+        for dependency in self.dependencies:
+            req = pkg_resources.Requirement.parse(dependency)
+            try:
+                pkg_resources.get_provider(req)
+            except pkg_resources.RequirementParseError as err:
+                self.logger.handle(err, self.logger.ERROR)
+                return False
+            except pkg_resources.DistributionNotFound:
+                self.logger.handle("The '{}' distribution was not found and is required "
+                                   "by the module".format(dependency), self.logger.ERROR)
+                self.logger.handle(update_msg, self.logger.USER_INTERACT)
+                return False
+            except pkg_resources.VersionConflict:
+                dist = pkg_resources.get_distribution(req.name)
+                Logger().handle("Version conflict: '{}' is required. Version '{}' is currently "
+                                "installed".format(dependency, dist.version), Logger().ERROR)
+                self.logger.handle(update_msg, self.logger.USER_INTERACT)
+                return False
+            # Recursively check sub_module dependencies
+            sub_module = import_module(req.name)
+            for d_amodule_class in get_amodule_class(sub_module, req.name, AModule):
+                amodule_class = d_amodule_class["class"](load_config())
+                if not amodule_class._check_dependencies():
+                    return False
+        return True
 
     def connect(self):
         """
         Connect to the Octowire using configured options.
+        If owf_serial is a valid serial instance, skip the connexion part (manage by a parent module).
         :return: Nothing
         """
-        if self.get_advanced_option_value("detect_octowire"):
-            self.owf_serial = self._manage_connection()
-        else:
-            port = self.get_advanced_option_value("octowire")
-            baudrate = self.get_advanced_option_value("baudrate")
-            timeout = self.get_advanced_option_value("timeout")
-            self.owf_serial = self._manage_connection(auto_connect=False, octowire_port=port,
-                                                      octowire_baudrate=baudrate, octowire_timeout=timeout)
+        if not isinstance(self.owf_serial, serial.Serial):
+            if self.get_advanced_option_value("detect_octowire"):
+                self.owf_serial = self._manage_connection()
+            else:
+                port = self.get_advanced_option_value("octowire")
+                baudrate = self.get_advanced_option_value("baudrate")
+                timeout = self.get_advanced_option_value("timeout")
+                self.owf_serial = self._manage_connection(auto_connect=False, octowire_port=port,
+                                                          octowire_baudrate=baudrate, octowire_timeout=timeout)
 
     def _manage_connection(self, auto_connect=True, octowire_port=None, octowire_baudrate=None, octowire_timeout=1):
         """

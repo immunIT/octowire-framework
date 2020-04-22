@@ -29,6 +29,7 @@ def run_module(owf_instance, *args):
                     # Close the serial instance after module completion
                     if isinstance(owf_instance.current_module.owf_serial, serial.Serial):
                         owf_instance.current_module.owf_serial.close()
+                        owf_instance.current_module.owf_serial = None
                 except KeyboardInterrupt:
                     pass
         except (ValueError, Exception) as err:

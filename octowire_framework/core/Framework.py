@@ -20,6 +20,7 @@ from octowire.utils.Logger import Logger
 from octowire_framework.module.AModule import AModule
 from octowire_framework.core.config import load_config
 from octowire_framework.core.Dispatcher import Dispatcher
+from octowire_framework.core.utils.get_amodule_class import get_amodule_class
 
 
 class Framework:
@@ -150,6 +151,7 @@ class Framework:
         self.completer_nested_dict["unsetg"] = options
         self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
 
+
     def _list_modules(self):
         """
         Generate modules path and attributes list.
@@ -166,12 +168,10 @@ class Framework:
         else:
             for loader, module, is_pkg in pkgutil.walk_packages(package.__path__, prefix=package.__name__ + '.'):
                 try:
-                    imported_module = import_module(module)
-                    for x in dir(imported_module):
-                        obj = getattr(imported_module, x)
-                        if inspect.isclass(obj) and issubclass(obj, AModule) and obj is not AModule:
-                            module_path = module.replace('owfmodules.', '').replace('.', '/')
-                            modules.append({"path": module_path, "class": obj})
+                    if not is_pkg:
+                        imported_module = import_module(module)
+                        for d_module in get_amodule_class(imported_module, module, AModule):
+                            modules.append(d_module)
                 except ImportError as err:
                     self.logger.handle('Unable to import package "{}":  {}...'.format(module, err), Logger.ERROR)
         self.logger.handle("{} modules loaded, run 'owfupdate' command to install the latest modules"
