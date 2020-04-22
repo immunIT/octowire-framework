@@ -19,7 +19,7 @@ class Validator:
     def __init__(self):
         self.logger = Logger()
 
-    def _args_validator(self, option):
+    def _args_validator(self, option_name, option):
         """
         Check argument type validity & convert to the specified format.
         :param option: Module option.
@@ -53,7 +53,7 @@ class Validator:
             if option["Value"] == "None":
                 option["Value"] = None
         except ValueError:
-            self.logger.handle("Value error: {} is not a valid {}".format(option["Name"], option["Type"]))
+            self.logger.handle("Value error: {} is not a valid {}".format(option_name, option["Type"]))
             return False
         return True
 
@@ -64,14 +64,14 @@ class Validator:
         :return: bool
         """
         if len(options_dict) > 0:
-            for option in options_dict:
+            for option_name, option in options_dict.items():
                 if option["Value"] == "":
                     if option["Default"] == "" and option["Required"]:
                         self.logger.handle("OptionValidationError: The following options failed to validate: {}."
-                                           .format(option["Name"]), Logger.ERROR)
+                                           .format(option_name), Logger.ERROR)
                         return False
                     else:
                         option["Value"] = option["Default"]
-                if not self._args_validator(option):
+                if not self._args_validator(option_name, option):
                     return False
         return True
