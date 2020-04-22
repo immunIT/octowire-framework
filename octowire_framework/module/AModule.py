@@ -124,30 +124,6 @@ class AModule(ABC):
             self.logger.handle("Error during serial connection: {}".format(err))
             return None
 
-    def get_advanced_option_value(self, option_name):
-        """
-        Return the value of a specific advanced option.
-        :param option_name: The desired option name.
-        :return: Option value.
-        """
-        for option in self.advanced_options:
-            if option["Name"] == option_name:
-                return option["Value"]
-        else:
-            raise UserWarning("Value {} not found in module options".format(option_name))
-
-    def get_option_value(self, option_name):
-        """
-        Return the value of a specific option.
-        :param option_name: The desired option name.
-        :return: Option value.
-        """
-        for option in self.options:
-            if option["Name"] == option_name:
-                return option["Value"]
-        else:
-            raise UserWarning("Value {} not found in module options".format(option_name))
-
     def show_options(self, options):
         """
         Print available options for the module to the console.
