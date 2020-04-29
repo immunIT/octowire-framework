@@ -32,8 +32,10 @@ def run_module(owf_instance, *args):
                         owf_instance.current_module.owf_serial = None
                 except KeyboardInterrupt:
                     pass
-        except (ValueError, Exception) as err:
+        except ValueError as err:
             owf_instance.logger.handle(err, Logger.ERROR)
+        except Exception as err:
+            owf_instance.logger.handle("{}: {}".format(type(err).__name__, str(err)))
         except:
             owf_instance.logger.handle("Error running module", Logger.ERROR)
             traceback.print_exc()
