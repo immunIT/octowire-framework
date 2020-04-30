@@ -28,7 +28,8 @@ setup(
         'pyserial>=3.4,<4',
         'psutil>=5.6.7',
         'octowire>=1.0.0',
-        'colorama>=0.4.3;platform_system=="Windows"'
+        'colorama>=0.4.3;platform_system=="Windows"',
+        'request>=2.23.0'
     ],
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
