@@ -65,7 +65,7 @@ class OWFUpdate:
         Return a dict of modules that have a release on the octowire-framework project.
         :return: A dict of available modules {'module_name': 'version', ...}.
         """
-        self.logger.handle("Obtain the list of package releases... This may take a while...", self.logger.USER_INTERACT)
+        self.logger.handle("Obtaining the list of package releases... This may take a while...", self.logger.USER_INTERACT)
         modules = {}
         resp = requests.get('{}{}'.format(self.bitbucket_base_url, '/repositories/octowire/?q=project.key="MOD"'))
         if resp.status_code == 200:

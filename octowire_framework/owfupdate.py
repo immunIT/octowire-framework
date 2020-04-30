@@ -33,7 +33,7 @@ def main():
         Logger().handle("Please run 'owfupdate' as root or use a virtualenv. Exiting...", Logger.ERROR)
         exit(1)
     print('-----------------------------------------------------------------------')
-    print('----------------Fetching and installing available modules---------------')
+    print('----------------Fetching and installing available modules--------------')
     print('-----------------------------------------------------------------------')
     if args.moduleonly:
         OWFUpdate().update(update_framework=False)
