@@ -29,7 +29,7 @@ setup(
         'psutil>=5.6.7',
         'octowire>=1.0.0',
         'colorama>=0.4.3;platform_system=="Windows"',
-        'request>=2.23.0'
+        'requests>=2.23.0'
     ],
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
