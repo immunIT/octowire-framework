@@ -7,8 +7,9 @@
 # Jordan Ovrè / Ghecko <ghecko78@gmail.com
 
 
-import inspect
+import asyncio
 import pkgutil
+import selectors
 import sys
 
 from importlib import import_module
@@ -194,6 +195,10 @@ class Framework:
         Main loop - handles user input.
         :return: Nothing
         """
+        # Temporary fix for the WinError 995 error waiting for python 3.8 asyncio fix
+        selector = selectors.SelectSelector()
+        loop = asyncio.SelectorEventLoop(selector)
+        asyncio.set_event_loop(loop)
         # This section is used to handle a script file
         if file_script is not None:
             file_script = Path(file_script)
