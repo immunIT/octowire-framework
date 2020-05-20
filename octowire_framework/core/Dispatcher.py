@@ -31,7 +31,7 @@ class Dispatcher:
             "help": {"descr": "Help menu", "run": owf_help, "arguments": {}},
             "show": {"descr": "modules|options|advanced|config|global: Displays modules list,\n"
                               "module (advanced) options, global configuration or global options", "run": show,
-                     "arguments": {"options", "advanced", "modules", "config", "global"}},
+                     "arguments": {"options": None, "advanced": None, "modules": None, "config": None, "global": None}},
             "use": {"descr": "Load a module by name", "run": use, "arguments": {}},
             "run": {"descr": "Run the selected module", "run": run_module, "arguments": {}},
             "back": {"descr": "Move back from the current context", "run": back, "arguments": {}},

@@ -104,6 +104,7 @@ class Framework:
         """
         nested_completion_dict = {}
         modules_dict = {}
+        category_dict = {}
         config_dict = {}
         # Get all base commands
         for command_name, command_obj in self.dispatcher.commands.items():
@@ -111,10 +112,13 @@ class Framework:
                 nested_completion_dict.update({command_name: None})
             else:
                 nested_completion_dict.update({command_name: command_obj["arguments"]})
-        # Append all loaded modules
+        # Append all loaded modules and add category completion for the 'show modules' command
         for module in self.modules:
             modules_dict.update({module["path"]: None})
+            if module["path"].split("/")[0] not in category_dict:
+                category_dict.update({module["path"].split("/")[0]: None})
         nested_completion_dict["use"] = modules_dict
+        nested_completion_dict["show"]["modules"] = category_dict
         # Append all config sections and keys (for 'setc' command)
         for section in self.config:
             if section != "DEFAULT":

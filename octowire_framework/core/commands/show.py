@@ -43,22 +43,33 @@ def show(owf_instance, *args):
     :param args: Varargs command options.
     :return: Nothing
     """
-    # TODO: print by category separately
     if _check_args(owf_instance, *args):
         if args[0] == "modules":
             print("\n================")
             print("| Modules list |")
-            print("================\n")
+            print("================")
             formatted_modules = []
-            for module in owf_instance.modules:
-                formatted_modules.append({"Path": module["path"],
-                                          "Description": module["class"](owf_instance.config).meta["description"]})
+            # Show available modules in the selected category
+            try:
+                for module in owf_instance.modules:
+                    if args[1] == module["path"].split("/")[0]:
+                        formatted_modules.append({"Path": module["path"],
+                                                  "Description": module["class"](owf_instance.config).meta["description"]})
+                if len(formatted_modules) == 0:
+                    owf_instance.logger.handle(f"No module found in the '{args[1]}' category.",
+                                               owf_instance.logger.ERROR)
+                    return
+            # Show all installed modules
+            except IndexError:
+                for module in owf_instance.modules:
+                    formatted_modules.append({"Path": module["path"],
+                                              "Description": module["class"](owf_instance.config).meta["description"]})
             owf_instance.logger.print_tabulate(formatted_modules,
                                                headers={"Path": "Path", "Description": "Description"})
         elif args[0] == "config":
             print("\n================")
             print("|    Config    |")
-            print("================\n")
+            print("================")
             for section in owf_instance.config:
                 print("\n[{}]".format(section))
                 for key in owf_instance.config[section]:
