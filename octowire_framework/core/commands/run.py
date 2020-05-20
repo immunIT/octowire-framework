@@ -10,7 +10,7 @@ import traceback
 from octowire_framework.core.utils.Validator import Validator
 from octowire_framework.module.AModule import AModule
 from octowire.utils.Logger import Logger
-
+from octowire.octowire import Octowire
 
 def run_module(owf_instance, *args):
     """
@@ -28,6 +28,9 @@ def run_module(owf_instance, *args):
                     owf_instance.current_module.run()
                     # Close the serial instance after module completion
                     if isinstance(owf_instance.current_module.owf_serial, serial.Serial):
+                        # Return into text mode before closing serial_instance
+                        octowire_base = Octowire(serial_instance=owf_instance.current_module.owf_serial)
+                        octowire_base.ensure_text_mode()
                         owf_instance.current_module.owf_serial.close()
                         owf_instance.current_module.owf_serial = None
                 except KeyboardInterrupt:
