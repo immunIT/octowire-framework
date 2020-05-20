@@ -5,12 +5,10 @@
 # Jordan Ovrè / Ghecko <ghecko78@gmail.com
 
 
-from prompt_toolkit.completion.nested import NestedCompleter
-
 from octowire.utils.Logger import Logger
 
 
-def _print_usage(owf_instance, *args):
+def _print_usage(owf_instance):
     """
     Print 'use' command usage.
     :param owf_instance: Octowire framework instance (self).
