@@ -14,6 +14,7 @@ from octowire_framework.core.commands.help import owf_help
 from octowire_framework.core.commands.miniterm import miniterm
 from octowire_framework.core.commands.run import run_module
 from octowire_framework.core.commands.save_config import save_config
+from octowire_framework.core.commands.search import search
 from octowire_framework.core.commands.set_config import set_config
 from octowire_framework.core.commands.set_globals import set_globals
 from octowire_framework.core.commands.set_options import set_options
@@ -32,6 +33,7 @@ class Dispatcher:
             "show": {"descr": "modules|options|advanced|config|global: Displays modules list,\n"
                               "module (advanced) options, global configuration or global options", "run": show,
                      "arguments": {"options": None, "advanced": None, "modules": None, "config": None, "global": None}},
+            "search": {"descr": "Search modules that matches the keywords.", "run": search, "arguments": {}},
             "use": {"descr": "Load a module by name", "run": use, "arguments": {}},
             "run": {"descr": "Run the selected module", "run": run_module, "arguments": {}},
             "back": {"descr": "Move back from the current context", "run": back, "arguments": {}},
