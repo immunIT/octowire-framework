@@ -208,7 +208,6 @@ class Framework:
                 for command in commands:
                     command = self.session.prompt(self.prompt, style=self.prompt_style, default=command.strip(),
                                                   accept_default=True)
-                    print(command)
                     self.dispatcher.handle(self, command)
                     self.update_prompt()
             else:
