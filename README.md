@@ -13,7 +13,7 @@ To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](
 
 ## Requirements
 
-Python 3.8+
+Python 3.7+
 
 ## Installation
 
