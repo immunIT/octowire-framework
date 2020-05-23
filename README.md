@@ -7,7 +7,7 @@
 This project is a framework around the [Octowire hardware]().  
 It provides multiple modules allowing you to work efficiently and save time on any hardware project.  
 This framework is fully compatible with Linux and Windows (Not tested on MAC OS).  
-To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](https://www.microsoft.com/p/windows-terminal-preview/9n0dx20hk701).
+To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](https://www.microsoft.com/fr-ch/p/windows-terminal/9n0dx20hk701).
 
 [![asciicast](https://asciinema.org/a/308046.svg)](https://asciinema.org/a/308046)
 
