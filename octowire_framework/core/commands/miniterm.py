@@ -27,7 +27,7 @@ def key_description(character):
         else:
             return ""
     else:
-        ascii_code = ord(character)
+        ascii_code = ord(chr(character))
         if ascii_code < 32:
             return 'Ctrl+{:c}'.format(ord('@') + ascii_code)
         else:
@@ -96,7 +96,7 @@ def miniterm(owf_instance=None, *args):
         key_description(int(miniterm_cfg['exit_char'])),
         key_description(int(miniterm_cfg['menu_char'])),
         key_description(int(miniterm_cfg['menu_char'])),
-        key_description(0x48))
+        key_description(int(miniterm_cfg['menu_char_help'])))
     print(toolbar)
 
     mt.start()

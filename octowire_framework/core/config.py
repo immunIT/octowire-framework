@@ -45,8 +45,9 @@ def create_default_config(config, owf_dir, owf_config_path):
         'filters': 'default',
         'raw': False,
         'quiet': False,
-        'exit_char': 0x1b,
-        'menu_char': 0x00 if "Windows" in platform.system() else 0x70,
+        'exit_char': 0x1b if "Windows" in platform.system() else 0x1d,
+        'menu_char': 0x14,
+        'menu_char_help': 0x48 if "Windows" in platform.system() else 0x08,
         'serial_port_encoding': sys.getdefaultencoding(),
         'eol': 'CR'
     }
