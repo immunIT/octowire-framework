@@ -41,6 +41,7 @@ setup(
             'console_scripts': [
                 'owfconsole = octowire_framework.owfconsole:main',
                 'owfupdate = octowire_framework.owfupdate:main',
+                'owfremove = octowire_framework.owfremove:main',
             ]
     }
 )

@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+
+# Octowire Framework
+# Copyright (c) Jordan Ovrè / Paul Duncan
+# License: GPLv3
+# Paul Duncan / Eresse <eresse@dooba.io>
+# Jordan Ovrè / Ghecko <ghecko78@gmail.com
+
+
+import argparse
+import ctypes
+import os
+import sys
+from octowire_framework.core.utils.OWFRemove import OWFRemove
+from octowire.utils.Logger import Logger
+
+
+def is_venv():
+    return hasattr(sys, 'real_prefix') or sys.base_prefix != sys.prefix
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m', '--moduleonly', help='Only remove modules, not the framework',
+                        action="store_true")
+    args = parser.parse_args()
+    try:
+        is_admin = os.getuid() == 0
+    except AttributeError:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+
+    if not is_admin and not is_venv():
+        Logger().handle("Please run 'owfremove' as root or inside a virtualenv. Exiting...", Logger.ERROR)
+        exit(1)
+    print('--------------------------------------------------------')
+    print('----------------Removing installed modules--------------')
+    print('--------------------------------------------------------')
+    if args.moduleonly:
+        OWFRemove().remove(remove_framework=False)
+    else:
+        OWFRemove().remove(remove_framework=True)
+
+
+if __name__ == "__main__":
+    main()
