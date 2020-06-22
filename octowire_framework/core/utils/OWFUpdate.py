@@ -68,14 +68,23 @@ class OWFUpdate:
         self.logger.handle("Obtaining the list of package releases... This may take a while...", self.logger.USER_INTERACT)
         modules = {}
         resp = requests.get('{}{}'.format(self.bitbucket_base_url, '/repositories/octowire/?q=project.key="MOD"'))
-        if resp.status_code == 200:
-            for pkg in resp.json()["values"]:
-                pkg_tag_url = pkg["links"]["tags"]["href"]
-                resp_tags = requests.get(pkg_tag_url + "?sort=-name&pagelen=1")
-                if resp_tags.status_code == 200:
-                    latest_release = resp_tags.json()["values"]
-                    if latest_release:
-                        modules[pkg["name"]] = latest_release[0]["name"]
+        while True:
+            if resp.status_code == 200:
+                for pkg in resp.json()["values"]:
+                    pkg_tag_url = pkg["links"]["tags"]["href"]
+                    resp_tags = requests.get(pkg_tag_url + "?sort=-name&pagelen=1")
+                    if resp_tags.status_code == 200:
+                        latest_release = resp_tags.json()["values"]
+                        if latest_release:
+                            modules[pkg["name"]] = latest_release[0]["name"]
+                if "next" in resp.json():
+                    resp = requests.get('{}'.format(resp.json()["next"]))
+                else:
+                    break
+            else:
+                self.logger.handle("failed to load module list - HTTP response code: {}".format(resp.status_code),
+                                   self.logger.ERROR)
+                break
         if not modules:
             self.logger.handle('No releases/modules found', Logger.ERROR)
         return modules

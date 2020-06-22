@@ -167,7 +167,6 @@ class Framework:
         self.completer_nested_dict["setg"] = options
         self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
 
-
     def _list_modules(self):
         """
         Generate modules path and attributes list.
