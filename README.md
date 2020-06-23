@@ -1,4 +1,4 @@
-[![Python 3.7+](https://img.shields.io/badge/python-v3.7+-blue.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/license-GPLv3-important.svg)](LICENSE)
+[![Python 3.7+](https://img.shields.io/badge/python-v3.7+-blue.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 # octowire-framework [v1.0.0]
 
