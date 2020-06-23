@@ -27,7 +27,7 @@ setup(
         'prompt_toolkit>=3.0.3,<4',
         'pyserial>=3.4,<4',
         'psutil>=5.6.7',
-        'octowire>=1.0.0',
+        'octowire-lib>=1.0.0',
         'colorama>=0.4.3;platform_system=="Windows"',
         'requests>=2.23.0'
     ],
