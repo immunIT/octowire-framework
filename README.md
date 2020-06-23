@@ -9,7 +9,7 @@ It provides multiple modules allowing you to work efficiently and save time on a
 This framework is fully compatible with Linux and Windows (Not tested on MAC OS).  
 To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](https://www.microsoft.com/fr-ch/p/windows-terminal/9n0dx20hk701).
 
-[![asciicast](https://asciinema.org/a/308046.svg)](https://asciinema.org/a/308046)
+[![asciicast](https://asciinema.org/a/342058.svg)](https://asciinema.org/a/342058)
 
 ## Requirements
 
@@ -123,6 +123,11 @@ Simply run `owfconsole` from a shell and follow these instructions:
 
 ### How to properly remove the framework along with any installed modules?
 
+### Using owfremove
+
+Run `owfremove` in your terminal to uninstall the framework along with its modules.
+User configuration files need to be manually removed; these are present in '~/.owf' directory for any user which has run the framework at least once.
+
 #### Manual method
 
 Run `owfconsole` and execute the `show modules` command to list installed modules.
@@ -133,7 +138,3 @@ For each module, run `pip3 uninstall owfmodules.<category>.<module_name>`.
 Then, run `pip3 uninstall octowire_framework`.
 
 Finally, delete the `.owf` directory in your home folder.
-
-### Using owfremove
-
-**Coming soon**

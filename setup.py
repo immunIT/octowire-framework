@@ -7,9 +7,9 @@ from setuptools import setup
 
 __authors__ = "Jordan Ovrè, Paul Duncan"
 __copyright__ = "Copyright (c) Jordan Ovrè / Paul Duncan"
-__license__ = "GPLv3"
+__license__ = "Apache 2.0"
 __version__ = "1.0.0"
-__contact__ = "Jordan Ovrè / Ghecko <ghecko78@gmail.com>, Paul Duncan / Eresse <eresse@dooba.io>"
+__contact__ = "Jordan Ovrè / Ghecko <jovre@immunit.ch>, Paul Duncan / Eresse <pduncan@immunit.ch>"
 
 description = 'Octowire Framework Core'
 name = 'octowire_framework'
@@ -22,7 +22,7 @@ setup(
     description=description,
     author=__authors__,
     zip_safe=True,
-    url='https://bitbucket.org/octowire/octowire-framework/',
+    url='https://github.com/immunIT/octowire-framework',
     install_requires=[
         'prompt_toolkit>=3.0.3,<4',
         'pyserial>=3.4,<4',
@@ -32,7 +32,7 @@ setup(
         'requests>=2.23.0'
     ],
     classifiers=[
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3',
         'Development Status :: 5 - Production/Stable'
     ],

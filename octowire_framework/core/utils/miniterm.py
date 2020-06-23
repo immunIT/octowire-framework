@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Modified version of miniterm.
 #
 # Very simple serial terminal
 #
