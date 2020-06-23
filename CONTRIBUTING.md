@@ -20,17 +20,17 @@ If you do not care to follow these rules, your contribution will be closed.
 * Do one commit for each modification/addition/improvement
 * Use explicit commit messages
 * License your code as GPLv3 clause
-* Always start a new module using the [owfmodules.skeleton](https://bitbucket.org/octowire/owfmodules.skeleton/) base repository
+* Always start a new module using the [owfmodules.skeleton](https://github.com/immunIT/owfmodules.skeleton/) base repository
 
 ## Creating a new module
 
-Create an issue on [owfmodules.skeleton](https://bitbucket.org/octowire/owfmodules.skeleton/) with these details:
+Create an issue on [owfmodules.skeleton](https://github.com/immunIT/owfmodules.skeleton/) with these details:
 
 * Module name (owfmodules.CATEGORY.NAME)
 * A short description
 * Module category (uart, jtag, spi, misc, ...)
 
-If we accept the module, we will create a repository initiated with the [owfmodules.skeleton](xxxxxx) repository.
+If we accept the module, we will create a repository initiated with the [owfmodules.skeleton](https://github.com/immunIT/owfmodules.skeleton/) repository.
 
 ### Useful information
 
