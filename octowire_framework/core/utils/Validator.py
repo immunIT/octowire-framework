@@ -26,6 +26,9 @@ class Validator:
         :return: bool
         """
         try:
+            # Do not validated empty value if option is not required
+            if option["Value"] == "" and option["Required"] == False:
+                return True
             if option["Type"] == "int":
                 if not isinstance(option["Value"], int):
                     option["Value"] = int(option["Value"], 10)
