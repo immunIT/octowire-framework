@@ -22,7 +22,8 @@ import tarfile
 from octowire.utils.Logger import Logger
 
 
-github_base_url = "https://api.github.com"
+bitbucket_base_url = 'https://api.bitbucket.org/2.0'
+bitbucket_download_url = "https://bitbucket.org/octowire/{}/get/{}.tar.gz"
 python_path = sys.executable
 
 
@@ -111,18 +112,26 @@ def extract_tarball(filename):
     return setup_dir
 
 
-def get_latest_release_url():
+def _get_latest_framework_version():
     """
-    Get the latest release URL of a module or framework.
-    :return: url or None if not found.
+    Return the latest release version of the Octowire framework.
+    :return: String
     """
-    resp = requests.get(github_base_url + '/repos/immunIT/octowire-framework/releases/latest')
+    module_release_url = bitbucket_base_url + '/repositories/octowire/octowire-framework/' \
+                                              'refs/tags?sort=-name&pagelen=1'
+    resp = requests.get(module_release_url)
     if resp.status_code == 200:
-        return resp.json()["tarball_url"]
+        latest_release = resp.json()["values"]
+        if latest_release:
+            return latest_release[0]["name"]
+        else:
+            print(f'{Colors.FAIL}[X]{Colors.ENDC} No release found for the Octowire framework',
+                  Logger.ERROR)
+            return None
     else:
         print(f"{Colors.FAIL}[X]{Colors.ENDC} Unable to retrieve latest release URL. Check your network connection "
               f"and try again.")
-        exit(-1)
+        return None
 
 
 def install_modules():
@@ -143,14 +152,13 @@ def manage_install():
     except pkg_resources.DistributionNotFound:
         current_version = ''
     # Framework already installed
-    print(current_version)
     if current_version != '':
         print("{}[!] The octowire-framework is already installed. Please run 'owfupdate' to update it.{}"
               .format(Colors.WARNING, Colors.ENDC))
         exit(0)
     # Framework not installed on the system
     else:
-        release_tarball_url = get_latest_release_url()
+        release_tarball_url = f"{bitbucket_download_url.format('octowire-framework', _get_latest_framework_version())}"
         tarball_filename = download_release(release_tarball_url)
         if tarball_filename:
             print("[*] Extracting the tarball archive...")

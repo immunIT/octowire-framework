@@ -7,7 +7,6 @@
 # Jordan Ovrè / Ghecko <jovre@immunit.ch>
 
 
-import errno
 import inspect
 import os
 import pathlib
@@ -19,6 +18,7 @@ import requests
 import subprocess
 import sys
 import tarfile
+import tempfile
 
 from importlib import import_module
 
@@ -28,7 +28,8 @@ from octowire_framework.module.AModule import AModule
 
 class OWFUpdate:
     def __init__(self):
-        self.github_base_url = 'https://api.github.com'
+        self.bitbucket_base_url = 'https://api.bitbucket.org/2.0'
+        self.bitbucket_download_url = "https://bitbucket.org/octowire/{}/get/{}.tar.gz"
         self.logger = Logger()
         self.not_updated = []
         self.to_update = []
@@ -66,22 +67,24 @@ class OWFUpdate:
         """
         self.logger.handle("Obtaining the list of package releases... This may take a while...", self.logger.USER_INTERACT)
         modules = {}
-        resp = requests.get('{}{}'.format(self.github_base_url, '/orgs/immunit/repos'))
-        if resp.status_code == 200:
-            for pkg in resp.json():
-                if "owfmodules" in pkg["name"] and "owfmodules.skeleton" not in pkg["name"]:
-                    module_release_url = self.github_base_url + \
-                                         '/repos/immunit/{}/releases/latest'.format(pkg["name"])
-                    resp = requests.get(module_release_url)
-                    if resp.status_code == 200:
-                        modules[pkg["name"]] = resp.json()['tag_name']
-                    else:
-                        self.logger.handle("failed to get the latest release for the module '{}' - "
-                                           "HTTP response code: {}".format(pkg["name"], resp.status_code),
-                                           self.logger.ERROR)
-        else:
-            self.logger.handle("failed to load module list - HTTP response code: {}".format(resp.status_code),
-                               self.logger.ERROR)
+        resp = requests.get('{}{}'.format(self.bitbucket_base_url, '/repositories/octowire/?q=project.key="MOD"'))
+        while True:
+            if resp.status_code == 200:
+                for pkg in resp.json()["values"]:
+                    pkg_tag_url = pkg["links"]["tags"]["href"]
+                    resp_tags = requests.get(pkg_tag_url + "?sort=-name&pagelen=1")
+                    if resp_tags.status_code == 200:
+                        latest_release = resp_tags.json()["values"]
+                        if latest_release:
+                            modules[pkg["name"]] = latest_release[0]["name"]
+                if "next" in resp.json():
+                    resp = requests.get('{}'.format(resp.json()["next"]))
+                else:
+                    break
+            else:
+                self.logger.handle("failed to load module list - HTTP response code: {}".format(resp.status_code),
+                                   self.logger.ERROR)
+                break
         if not modules:
             self.logger.handle('No releases/modules found', Logger.ERROR)
         return modules
@@ -91,26 +94,18 @@ class OWFUpdate:
         Return the latest release version of the Octowire framework.
         :return: String
         """
-        module_release_url = self.github_base_url + '/repos/immunit/octowire-framework/releases/latest'
+        module_release_url = self.bitbucket_base_url + '/repositories/octowire/octowire-framework/' \
+                                                       'refs/tags?sort=-name&pagelen=1'
         resp = requests.get(module_release_url)
         if resp.status_code == 200:
-            return resp.json()['tag_name']
+            latest_release = resp.json()["values"]
+            if latest_release:
+                return latest_release[0]["name"]
+            else:
+                self.logger.handle('No release found for the Octowire framework', Logger.ERROR)
+                return None
         else:
             self.logger.handle('Unable to get the latest framework released version', Logger.ERROR)
-            return None
-
-    def _get_latest_release_url(self, module_name):
-        """
-        Get the latest release URL of a module or framework.
-        :param module_name: module name.
-        :return: url or None if not found.
-        """
-        module_release_url = self.github_base_url + '/repos/immunit/{}/releases/latest'.format(module_name)
-        resp = requests.get(module_release_url)
-        if resp.status_code == 200:
-            return resp.json()["tarball_url"]
-        else:
-            self.logger.handle(f"Unable to retrieve latest release URL for module '{module_name}'", Logger.ERROR)
             return None
 
     @staticmethod
@@ -127,7 +122,7 @@ class OWFUpdate:
             return None
         return fname[0]
 
-    def _download_release(self, module_tarball_url, package_name, package_version):
+    def _download_release(self, package_name, package_version):
         """
         Download the latest release of a package (module or framework).
         :param package_version: The package version.
@@ -135,23 +130,17 @@ class OWFUpdate:
         :return: Filename or None.
         """
         self.logger.handle("Downloading {} v{}...".format(package_name, package_version))
-        resp = requests.get(module_tarball_url, stream=True)
+        resp = requests.get(self.bitbucket_download_url.format(package_name, package_version), stream=True)
         if resp.status_code == 200:
-            filename = '/tmp/owfmodules/{}'.format(self._get_filename_from_cd(resp.headers.get('content-disposition')))
-            if not os.path.exists(os.path.dirname(filename)):
-                try:
-                    os.makedirs(os.path.dirname(filename))
-                except OSError as exc:
-                    if exc.errno != errno.EEXIST:
-                        raise
-            with open(filename, 'wb') as f:
-                f.write(resp.content)
-            return filename
+            file = tempfile.NamedTemporaryFile(suffix=".tar.gz", delete=False)
+            file.write(resp.content)
+            file.close()
+            return file.name
         else:
             self.logger.handle("failed to download the latest release for the module '{}' - "
                                "HTTP response code: {}".format(package_name, resp.status_code),
                                self.logger.ERROR)
-            return None
+        return None
 
     @staticmethod
     def _extract_tarball(filename):
@@ -174,8 +163,7 @@ class OWFUpdate:
         :param package_version: The package version to install (module or framework).
         :return: Bool: True if successfully installed, False otherwise.
         """
-        release_tarball_url = self._get_latest_release_url(package_name)
-        filename = self._download_release(release_tarball_url, package_name, package_version)
+        filename = self._download_release(package_name, package_version)
         python_path = sys.executable
         if filename:
             setup_dir = self._extract_tarball(filename)
