@@ -20,10 +20,10 @@ Python 3.7+
 ### One-liner
 
 ```
-# Windows powershell
+# Windows powershell (as Administrator)
 curl.exe -s https://raw.githubusercontent.com/immunIT/octowire-framework/master/install.py | python
 
-# Linux
+# Linux (as root)
 curl https://raw.githubusercontent.com/immunIT/octowire-framework/master/install.py | python
 ```
 
