@@ -17,6 +17,19 @@ Python 3.7+
 
 ## Installation
 
+### One-liner
+
+```
+# Windows powershell
+curl.exe -s https://raw.githubusercontent.com/immunIT/octowire-framework/master/install.py | python
+
+# Linux
+curl https://raw.githubusercontent.com/immunIT/octowire-framework/master/install.py | python
+```
+
+
+### Manual method
+
 Clone this repository or get the latest release, then run:
 
 ```
