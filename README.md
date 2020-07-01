@@ -13,7 +13,11 @@ To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](
 
 ## Requirements
 
-Python 3.7+
+Installing the framework will require the following: 
+ - python (at least 3.7)
+ - pip (for python3)
+ - python3-requests (`pip install requests`)
+ - python3-setuptools (`pip install setuptools`)
 
 ## Installation
 
