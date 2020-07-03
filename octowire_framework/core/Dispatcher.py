@@ -33,7 +33,7 @@ class Dispatcher:
             "show": {"descr": "modules|options|advanced|config|global: Displays modules list,\n"
                               "module (advanced) options, global configuration or global options", "run": show,
                      "arguments": {"options": None, "advanced": None, "modules": None, "config": None, "global": None}},
-            "search": {"descr": "Search modules that matches the keywords.", "run": search, "arguments": {}},
+            "search": {"descr": "Search for modules that match the given keywords", "run": search, "arguments": {}},
             "use": {"descr": "Load a module by name", "run": use, "arguments": {}},
             "run": {"descr": "Run the selected module", "run": run_module, "arguments": {}},
             "back": {"descr": "Move back from the current context", "run": back, "arguments": {}},
