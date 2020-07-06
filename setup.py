@@ -8,7 +8,7 @@ from setuptools import setup
 __authors__ = "Jordan Ovrè, Paul Duncan"
 __copyright__ = "Copyright (c) ImmunIT - Jordan Ovrè / Paul Duncan"
 __license__ = "Apache 2.0"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __contact__ = "Jordan Ovrè / Ghecko <jovre@immunit.ch>, Paul Duncan / Eresse <pduncan@immunit.ch>"
 
 description = 'Octowire Framework Core'
@@ -27,7 +27,7 @@ setup(
         'prompt_toolkit>=3.0.3,<4',
         'pyserial>=3.4,<4',
         'psutil>=5.6.7',
-        'octowire-lib>=1.0.0',
+        'octowire-lib>=1.0.1',
         'colorama>=0.4.3;platform_system=="Windows"',
         'requests>=2.23.0'
     ],
