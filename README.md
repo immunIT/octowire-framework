@@ -6,7 +6,7 @@
 
 This project is a framework around the [Octowire hardware]().  
 It provides multiple modules allowing you to work efficiently and save time on any hardware project.  
-This framework is fully compatible with Linux and Windows (Not tested on MAC OS).  
+This framework is fully compatible with Linux and Windows (Not tested on MacOS).  
 To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](https://www.microsoft.com/fr-ch/p/windows-terminal/9n0dx20hk701).
 
 [![asciicast](https://asciinema.org/a/342058.svg)](https://asciinema.org/a/342058)
@@ -42,7 +42,7 @@ python3 setup.py install
 
 ## Usage
 
-This framework is pretty simple to use.  
+This framework is designed to be simple to use.  
 Just run `owfconsole`, list available modules using the `show modules` command and load the one you need with `use <module_categroy>/<module_name>`.  
 Then, list available options for the current module: `show options`, setup the needed ones with `set <option_name> <value>` and finally run it with `run`!
 

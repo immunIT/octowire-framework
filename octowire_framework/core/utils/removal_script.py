@@ -12,8 +12,8 @@ script = """
 # Octowire Framework
 # Copyright (c) Jordan Ovrè / Paul Duncan
 # License: GPLv3
-# Paul Duncan / Eresse <eresse@dooba.io>
-# Jordan Ovrè / Ghecko <ghecko78@gmail.com
+# Paul Duncan / Eresse <pduncan@immunit.ch>
+# Jordan Ovrè / Ghecko <jovre@immunit.ch>
 
 import argparse
 import psutil
