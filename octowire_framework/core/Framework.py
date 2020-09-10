@@ -14,12 +14,12 @@ import sys
 
 from importlib import import_module
 from pathlib import Path
-from prompt_toolkit.completion.nested import NestedCompleter
 from prompt_toolkit.shortcuts import PromptSession
 from prompt_toolkit.styles import Style
 from octowire.utils.Logger import Logger
 from octowire_framework.module.AModule import AModule
 from octowire_framework.core.config import load_config
+from octowire_framework.core.CustomCompleter import CustomCompleter
 from octowire_framework.core.Dispatcher import Dispatcher
 from octowire_framework.core.utils.get_amodule_class import get_amodule_class
 
@@ -38,7 +38,7 @@ class Framework:
         self.modules_history = []
         self.config = load_config()
         self.completer_nested_dict = self._get_dict_completion()
-        self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
+        self.console_completer = CustomCompleter.from_nested_dict(self.completer_nested_dict)
         self.global_options = {}
         self.stop_miniterm_thread = 0
         self.prompt_style = Style.from_dict({
@@ -142,7 +142,9 @@ class Framework:
                 options.update({option_name: None})
         self.completer_nested_dict["set"] = options
         self.completer_nested_dict["unset"] = options
-        self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
+        self.console_completer = CustomCompleter.from_nested_dict(self.completer_nested_dict)
+        # update console_completer owf_instance variable
+        self.console_completer.owf_instance = self
 
     def update_unset_global_completer(self):
         """
@@ -153,7 +155,8 @@ class Framework:
         for option_name, _ in self.global_options.items():
             options.update({option_name: None})
         self.completer_nested_dict["unsetg"] = options
-        self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
+        self.console_completer = CustomCompleter.from_nested_dict(self.completer_nested_dict)
+        self.console_completer.owf_instance = self
 
     def update_set_global_completer(self):
         """
@@ -165,7 +168,8 @@ class Framework:
             for module_option_name, module_option in self.current_module.options.items():
                 options.update({module_option_name: None})
         self.completer_nested_dict["setg"] = options
-        self.console_completer = NestedCompleter.from_nested_dict(self.completer_nested_dict)
+        self.console_completer = CustomCompleter.from_nested_dict(self.completer_nested_dict)
+        self.console_completer.owf_instance = self
 
     def _list_modules(self):
         """
