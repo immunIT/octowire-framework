@@ -7,7 +7,9 @@
 # Jordan Ovrè / Ghecko <jovre@immunit.ch>
 
 
-import os
+import platform
+import shutil
+import subprocess
 from octowire_framework.core.commands.back import back
 from octowire_framework.core.commands.detect import detect
 from octowire_framework.core.commands.help import owf_help
@@ -48,6 +50,9 @@ class Dispatcher:
             "miniterm": {"descr": "Open a miniterm serial console", "run": miniterm, "arguments": {}},
             "exit": {"descr": "Exit the console", "run": owf_exit, "arguments": {}}
         }
+        # If Windows and PowerShell available, call powershell for system command
+        self.system_cmd = 'powershell -c "{}"' if ("Windows" in platform.system() and
+                                                   shutil.which("PowerShell") is not None) else "{}"
 
     def handle(self, owf_instance, user_input):
         """
@@ -58,6 +63,8 @@ class Dispatcher:
         args = user_input.split(" ")
         command = args.pop(0)
         try:
+            # Run octowire framework internal command.
             self.commands[command]["run"](owf_instance, *args)
         except KeyError:
-            os.system(user_input)
+            # Run system command.
+            subprocess.call(self.system_cmd.format(user_input), shell=True)
