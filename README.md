@@ -9,7 +9,7 @@ It provides multiple modules allowing you to work efficiently and save time on a
 This framework is fully compatible with Linux and Windows (Not tested on MacOS).  
 To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](https://www.microsoft.com/fr-ch/p/windows-terminal/9n0dx20hk701).
 
-[![asciicast](https://asciinema.org/a/359107.svg)](https://asciinema.org/a/359107)
+[![asciicast](https://asciinema.org/a/359173.svg)](https://asciinema.org/a/359173)
 
 ## Requirements
 
