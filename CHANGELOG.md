@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ## Changed
 
 - Improvement of system command execution for Windows system
+- Asciinema video link updated
 
 ## [1.0.1] - 2020-07-06
 

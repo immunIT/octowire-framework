@@ -1,6 +1,6 @@
 [![Python 3.7+](https://img.shields.io/badge/python-v3.7+-blue.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-# octowire-framework [v1.0.1]
+# octowire-framework [v1.1.0]
 
 ## Description
 
@@ -9,7 +9,7 @@ It provides multiple modules allowing you to work efficiently and save time on a
 This framework is fully compatible with Linux and Windows (Not tested on MacOS).  
 To obtain a more beautiful rendering on Windows, use the new [Windows Terminal](https://www.microsoft.com/fr-ch/p/windows-terminal/9n0dx20hk701).
 
-[![asciicast](https://asciinema.org/a/342058.svg)](https://asciinema.org/a/342058)
+[![asciicast](https://asciinema.org/a/359107.svg)](https://asciinema.org/a/359107)
 
 ## Requirements
 
@@ -45,6 +45,10 @@ python3 setup.py install
 This framework is designed to be simple to use.  
 Just run `owfconsole`, list available modules using the `show modules` command and load the one you need with `use <module_categroy>/<module_name>`.  
 Then, list available options for the current module: `show options`, setup the needed ones with `set <option_name> <value>` and finally run it with `run`!
+
+Auto completion is implemented on the framework. Press the `Tab` key anywhere to trigger the auto completion.
+A file/path completer is available for the `set` and `setg` framework command if the option required a file.
+Typing a slash `/` is required to trigger the auto completion on child folders.
 
 ## Updating the framework and updating/installing latest modules.
 
