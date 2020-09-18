@@ -37,10 +37,10 @@ class CustomCompleter(NestedCompleter):
 
                 # Add a path completer only on set and setg command
                 if owf_ucmd in ["set", "setg"]:
-                    # Extract the option name supplied by the user to check if it need file autocompletion
+                    # Extract the option name supplied by the user to check if it needs file autocompletion
                     supplied_opt_name = text.split()[1]
 
-                    # Check if the option required a file
+                    # Check if the option requires a file
                     for opt_name, opt in self.owf_instance.current_module.options.items():
                         if opt_name == supplied_opt_name and opt["Type"] in ["file_r", "file_w"]:
                             cmd_len = sum(len(x) for x in text.split()[0:2]) + text.count(" ")

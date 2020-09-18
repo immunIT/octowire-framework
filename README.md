@@ -46,9 +46,9 @@ This framework is designed to be simple to use.
 Just run `owfconsole`, list available modules using the `show modules` command and load the one you need with `use <module_categroy>/<module_name>`.  
 Then, list available options for the current module: `show options`, setup the needed ones with `set <option_name> <value>` and finally run it with `run`!
 
-Auto completion is implemented on the framework. Press the `Tab` key anywhere to trigger the auto completion.
-A file/path completer is available for the `set` and `setg` framework command if the option required a file.
-Typing a slash `/` is required to trigger the auto completion on child folders.
+Auto completion is implemented in the framework. Press the `Tab` key anywhere to trigger the auto completion.
+A file/path completer is available for the `set` and `setg` framework commands if the option expects a file.
+Typing a slash `/` is required to trigger the auto completion on sub folders.
 
 ## Updating the framework and updating/installing latest modules.
 

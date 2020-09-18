@@ -50,7 +50,7 @@ class Dispatcher:
             "miniterm": {"descr": "Open a miniterm serial console", "run": miniterm, "arguments": {}},
             "exit": {"descr": "Exit the console", "run": owf_exit, "arguments": {}}
         }
-        # If Windows and PowerShell available, call powershell for system command
+        # If Windows and PowerShell are available, call powershell for system commands
         self.system_cmd = 'powershell -c "{}"' if ("Windows" in platform.system() and
                                                    shutil.which("PowerShell") is not None) else "{}"
 

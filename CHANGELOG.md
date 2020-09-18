@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Add file/path completion for set and setg command if the option required a file
+- Add file/path completion for set and setg command if the option requires a file
 
 ## Changed
 
