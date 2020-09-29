@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+## Changed
+
+- Improvement of system command execution.
+
+## [1.1.0] - 2020-09-10
+
+### Added
+
 - Add file/path completion for set and setg command if the option requires a file
 
 ## Changed

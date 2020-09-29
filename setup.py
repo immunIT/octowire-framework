@@ -8,7 +8,7 @@ from setuptools import setup
 __authors__ = "Jordan Ovrè, Paul Duncan"
 __copyright__ = "Copyright (c) ImmunIT - Jordan Ovrè / Paul Duncan"
 __license__ = "Apache 2.0"
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __contact__ = "Jordan Ovrè / Ghecko <jovre@immunit.ch>, Paul Duncan / Eresse <pduncan@immunit.ch>"
 
 description = 'Octowire Framework Core'

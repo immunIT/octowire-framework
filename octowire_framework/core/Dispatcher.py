@@ -7,6 +7,8 @@
 # Jordan Ovrè / Ghecko <jovre@immunit.ch>
 
 
+import os
+import psutil
 import platform
 import shutil
 import subprocess
@@ -50,9 +52,33 @@ class Dispatcher:
             "miniterm": {"descr": "Open a miniterm serial console", "run": miniterm, "arguments": {}},
             "exit": {"descr": "Exit the console", "run": owf_exit, "arguments": {}}
         }
-        # If Windows and PowerShell are available, call powershell for system commands
-        self.system_cmd = 'powershell -c "{}"' if ("Windows" in platform.system() and
-                                                   shutil.which("PowerShell") is not None) else "{}"
+        self.is_windows_powershell = False
+        if "Windows" in platform.system():
+            # Get the name of the process which starts the owfconsole.exe binary
+            self.parent_process = psutil.Process(psutil.Process(os.getppid()).ppid()).name()
+            # Check if owfconsole.exe was started by powershell
+            self.is_windows_powershell = True if ("Windows" in platform.system() and
+                                                  self.parent_process in {"powershell.exe", "pwsh.exe"}) else False
+        else:
+            # Get the name of the process which starts the owfconsole binary
+            self.parent_process = psutil.Process(os.getppid()).name()
+
+    def run_system_command(self, user_input):
+        """
+        System command management.
+        :param user_input: User input
+        :return:
+        """
+        if "Windows" in platform.system():
+            # If Windows PowerShell -> run system commands calling the PowerShell binary
+            if self.is_windows_powershell:
+                subprocess.run([self.parent_process, "-c", user_input], shell=True)
+            # Else, use the default subprocess method.
+            else:
+                subprocess.run([user_input], shell=True)
+        else:
+            # Run system command using the current shell
+            subprocess.run([user_input], shell=True, executable=self.parent_process)
 
     def handle(self, owf_instance, user_input):
         """
@@ -67,4 +93,4 @@ class Dispatcher:
             self.commands[command]["run"](owf_instance, *args)
         except KeyError:
             # Run system command.
-            subprocess.call(self.system_cmd.format(user_input), shell=True)
+            self.run_system_command(user_input)
