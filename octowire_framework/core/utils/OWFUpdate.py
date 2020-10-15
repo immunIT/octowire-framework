@@ -238,30 +238,33 @@ class OWFUpdate:
         :param update_framework: If True, check whether a framework update is available.
         :return: Nothing
         """
-        available_modules = self._get_available_modules()
-        installed_modules = self._get_installed_modules()
-        for name, version in available_modules.items():
-            installed_module_version = installed_modules.get(name, None)
-            if installed_module_version is not None:
-                if pkg_resources.parse_version(installed_module_version) < pkg_resources.parse_version(version):
-                    self.to_update.append({"name": name, "version": version})
-            else:
-                self.to_install.append({"name": name, "version": version})
-        if not self.to_update and not self.to_install:
-            self.logger.handle("Everything is up-to-date", Logger.SUCCESS)
-        for module in self.to_update:
-            self.logger.handle("Updating module '{}' to version {}".format(module["name"], module["version"]),
-                               Logger.INFO)
-            if not self._manage_install(module["name"], module["version"]):
-                self.not_updated.append(module["name"])
-        for module in self.to_install:
-            self.logger.handle("Installing module '{}' version {}".format(module["name"], module["version"]),
-                               Logger.INFO)
-            if not self._manage_install(module["name"], module["version"]):
-                self.not_updated.append(module["name"])
-        if len(self.not_updated) > 0:
-            self.logger.handle("Unable to update/install the following package(s):", Logger.ERROR)
-            for module in self.not_updated:
-                print(" - {}".format(module))
-        if update_framework:
-            self._update_framework()
+        try:
+            available_modules = self._get_available_modules()
+            installed_modules = self._get_installed_modules()
+            for name, version in available_modules.items():
+                installed_module_version = installed_modules.get(name, None)
+                if installed_module_version is not None:
+                    if pkg_resources.parse_version(installed_module_version) < pkg_resources.parse_version(version):
+                        self.to_update.append({"name": name, "version": version})
+                else:
+                    self.to_install.append({"name": name, "version": version})
+            if not self.to_update and not self.to_install:
+                self.logger.handle("Everything is up-to-date", Logger.SUCCESS)
+            for module in self.to_update:
+                self.logger.handle("Updating module '{}' to version {}".format(module["name"], module["version"]),
+                                   Logger.INFO)
+                if not self._manage_install(module["name"], module["version"]):
+                    self.not_updated.append(module["name"])
+            for module in self.to_install:
+                self.logger.handle("Installing module '{}' version {}".format(module["name"], module["version"]),
+                                   Logger.INFO)
+                if not self._manage_install(module["name"], module["version"]):
+                    self.not_updated.append(module["name"])
+            if len(self.not_updated) > 0:
+                self.logger.handle("Unable to update/install the following package(s):", Logger.ERROR)
+                for module in self.not_updated:
+                    print(" - {}".format(module))
+            if update_framework:
+                self._update_framework()
+        except requests.exceptions.ConnectionError:
+            self.logger.handle("Failed to reach servers. Please check your internet connection.", Logger.ERROR)

@@ -2,7 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.1.0] - 2020-09-10
+## [1.1.2] - 2020-09-29
+
+### Added
+
+## Changed
+
+- Network issues catch when calling owfupdate.
+
+## [1.1.1] - 2020-09-29
 
 ### Added
 
