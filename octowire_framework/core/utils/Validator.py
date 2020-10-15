@@ -32,6 +32,7 @@ class Validator:
             if option["Type"] == "int":
                 if not isinstance(option["Value"], int):
                     option["Value"] = int(option["Value"], 10)
+            # Hex string to int
             elif option["Type"] == "hex":
                 if not isinstance(option["Value"], int):
                     option["Value"] = int(option["Value"], 16)
@@ -43,6 +44,10 @@ class Validator:
                         option["Value"] = True
                     else:
                         raise ValueError("option {}: True or False are expected.".format(option["Value"]))
+            # Hex string to bytes
+            elif option["Type"] == "hextobytes":
+                if not isinstance(option["Value"], bytes):
+                    option["Value"] = bytes.fromhex(option["Value"])
             # File to read
             elif option["Type"] == "file_r":
                 if not os.access(option["Value"], os.R_OK):
