@@ -28,11 +28,13 @@ def run_module(owf_instance, *args):
                     owf_instance.current_module.run()
                     # Close the serial instance after module completion
                     if isinstance(owf_instance.current_module.owf_serial, serial.Serial):
-                        # Return into text mode before closing serial_instance
-                        octowire_base = Octowire(serial_instance=owf_instance.current_module.owf_serial)
-                        octowire_base.ensure_text_mode()
-                        owf_instance.current_module.owf_serial.close()
-                        owf_instance.current_module.owf_serial = None
+                        # Check if the serial connection is not closed
+                        if owf_instance.current_module.owf_serial.is_open:
+                            # Return into text mode before closing serial_instance
+                            octowire_base = Octowire(serial_instance=owf_instance.current_module.owf_serial)
+                            octowire_base.ensure_text_mode()
+                            owf_instance.current_module.owf_serial.close()
+                            owf_instance.current_module.owf_serial = None
                 except KeyboardInterrupt:
                     pass
         except ValueError as err:
