@@ -5,8 +5,24 @@
 # Jordan Ovrè / Ghecko <jovre@immunit.ch>
 
 
+import copy
+
 from octowire_framework.module.AModule import AModule
 from octowire.utils.Logger import Logger
+
+
+def _format_options_dict(options):
+    """
+    Format the options dictionnary to print 'False' or 'True' instead of '0' or '1'.
+    :param options: options module dict.
+    :return: Formatted options for Beautifultable printing
+    :rtype: Dict.
+    """
+    # Make a copy of the original options dict (To avoid modification of the parent)
+    f_options = copy.deepcopy(options)
+    for opt_n, opt_p in f_options.items():
+        opt_p["Required"] = "True" if opt_p["Required"] else "False"
+    return f_options
 
 
 def _print_usage(owf_instance, *args):
@@ -82,9 +98,10 @@ def show(owf_instance, *args):
                 print(f"{key} ==> {value}")
         elif args[0] == "options":
             if isinstance(owf_instance.current_module, AModule):
-                owf_instance.current_module.show_options(owf_instance.current_module.options)
+                owf_instance.current_module.show_options(_format_options_dict(owf_instance.current_module.options))
         elif args[0] == "advanced":
             if isinstance(owf_instance.current_module, AModule):
-                owf_instance.current_module.show_options(owf_instance.current_module.advanced_options)
+                owf_instance.current_module.show_options(
+                    _format_options_dict(owf_instance.current_module.advanced_options))
         else:
             _print_usage(owf_instance)

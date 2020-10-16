@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2020-10-16
+
+### Added
+
+- Added type 'float' to argument validation.
+
+## Changed
+
+- Improvement of options printing due to BeautifulTable upgrade.
+- Change octowire-lib required version.
+- Properly manage Octowire serial instance state (After running a module).
+- Old advanced options (Octowire port, baudrate and detect) are now loaded from the configuration file.
+
 ## [1.1.3] - 2020-10-15
 
 ### Added
