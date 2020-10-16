@@ -81,12 +81,12 @@ class AModule(ABC):
         :return: Nothing
         """
         if not isinstance(self.owf_serial, serial.Serial) or not self.owf_serial.is_open:
-            if self.config["OCTOWIRE"]["detect"]:
+            if self.config["OCTOWIRE"].getint("detect"):
                 self.owf_serial = self._manage_connection()
             else:
                 port = self.config["OCTOWIRE"]["port"]
-                baudrate = self.config["OCTOWIRE"]["baudrate"]
-                timeout = self.config["OCTOWIRE"]["read_timeout"]
+                baudrate = self.config["OCTOWIRE"].getint("baudrate")
+                timeout = self.config["OCTOWIRE"].getint("read_timeout")
                 self.owf_serial = self._manage_connection(auto_connect=False, octowire_port=port,
                                                           octowire_baudrate=baudrate, octowire_timeout=timeout)
 
