@@ -27,11 +27,14 @@ class Validator:
         """
         try:
             # Do not validated empty value if option is not required
-            if option["Value"] == "" and option["Required"] == False:
+            if option["Value"] == "" and not option["Required"]:
                 return True
             if option["Type"] == "int":
                 if not isinstance(option["Value"], int):
                     option["Value"] = int(option["Value"], 10)
+            if option["Type"] == "float":
+                if not isinstance(option["Value"], float):
+                    option["Value"] = float(option["Value"])
             # Hex string to int
             elif option["Type"] == "hex":
                 if not isinstance(option["Value"], int):
