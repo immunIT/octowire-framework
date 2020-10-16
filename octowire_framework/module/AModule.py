@@ -31,19 +31,7 @@ class AModule(ABC):
             'author': ''
         }
         self.options = {}
-        self.advanced_options = {
-            "detect_octowire": {"Value": "", "Required": True, "Type": "bool",
-                                "Description": "Detect and connect octowire hardware", "Default": True},
-            "octowire_port": {"Value": "", "Required": True, "Type": "string",
-                              "Description": "Octowire hardware serial port",
-                              "Default": self.config["OCTOWIRE"]["port"]},
-            "octowire_baudrate": {"Value": "", "Required": True, "Type": "int",
-                                  "Description": "Octowire serial baudrate",
-                                  "Default": self.config["OCTOWIRE"]["baudrate"]},
-            "octowire_timeout": {"Value": "", "Required": True, "Type": "int",
-                                 "Description": "Octowire read timeout",
-                                 "Default": self.config["OCTOWIRE"]["read_timeout"]},
-        }
+        self.advanced_options = {}
         self.dependencies = []
 
     def __name__(self):
@@ -92,13 +80,13 @@ class AModule(ABC):
         If owf_serial is a valid serial instance, skip the connexion part (manage by a parent module).
         :return: Nothing
         """
-        if not isinstance(self.owf_serial, serial.Serial):
-            if self.advanced_options["detect_octowire"]["Value"]:
+        if not isinstance(self.owf_serial, serial.Serial) or not self.owf_serial.is_open:
+            if self.config["OCTOWIRE"]["detect"]:
                 self.owf_serial = self._manage_connection()
             else:
-                port = self.advanced_options["octowire_port"]["Value"]
-                baudrate = self.advanced_options["octowire_baudrate"]["Value"]
-                timeout = self.advanced_options["octowire_timeout"]["Value"]
+                port = self.config["OCTOWIRE"]["port"]
+                baudrate = self.config["OCTOWIRE"]["baudrate"]
+                timeout = self.config["OCTOWIRE"]["read_timeout"]
                 self.owf_serial = self._manage_connection(auto_connect=False, octowire_port=port,
                                                           octowire_baudrate=baudrate, octowire_timeout=timeout)
 

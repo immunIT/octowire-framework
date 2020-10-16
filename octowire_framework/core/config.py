@@ -73,4 +73,12 @@ def load_config():
     if not owf_dir.is_dir() or not owf_config_path.is_file():
         create_default_config(config, owf_dir, owf_config_path)
     config.read(str(owf_config_path))
+    # New from 1.2.0
+    try:
+        config['OCTOWIRE']['detect']
+    except KeyError:
+        # The detect key config does not exist, create it
+        config['OCTOWIRE']['detect'] = "1"
+        with owf_config_path.open('w') as cfg_file:
+            config.write(cfg_file)
     return config
