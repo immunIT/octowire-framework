@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2021-01-07
+
+### Added
+
+## Changed
+
+- Create a backup of both options and advanced_options dictionary when "run" command is called. This ensures to keep values readability after the Validator's call.
+
 ## [1.2.0] - 2020-10-16
 
 ### Added

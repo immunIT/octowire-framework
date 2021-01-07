@@ -5,6 +5,7 @@
 # Jordan Ovrè / Ghecko <jovre@immunit.ch>
 
 
+import copy
 import serial
 import traceback
 from octowire_framework.core.utils.Validator import Validator
@@ -20,6 +21,10 @@ def run_module(owf_instance, *args):
     :return: Nothing
     """
     if isinstance(owf_instance.current_module, AModule):
+        # Create a backup of both options and advanced_options dict
+        # (to keep values readability after the Validator's call)
+        b_options = copy.deepcopy(owf_instance.current_module.options)
+        b_advanced_options = copy.deepcopy(owf_instance.current_module.advanced_options)
         try:
             opt_checked = Validator().check_args(owf_instance.current_module.options)
             adv_checked = Validator().check_args(owf_instance.current_module.advanced_options)
@@ -44,3 +49,7 @@ def run_module(owf_instance, *args):
         except:
             owf_instance.logger.handle("Error running module", Logger.ERROR)
             traceback.print_exc()
+        finally:
+            # Restoring the dictionaries backup for values readability
+            owf_instance.current_module.options = copy.deepcopy(b_options)
+            owf_instance.current_module.advanced_options = copy.deepcopy(b_advanced_options)
