@@ -76,6 +76,17 @@ self.advanced_options.append(
 
 3. Implement the `run` method
 
+#### Available type options
+
+ - "string" -> String
+ - "int" -> Integer (1337)
+ - "float" -> float (1337.0)
+ - "hex" -> Hexadecimal (0x1337)
+ - "bool" -> Boolean (0, 1, True, False)
+ - "hextobytes" -> Automatically convert Hexadecimal string (0x1337) to Bytes
+ - "file_r" -> Readable file path
+ - "file_w" -> Writable file path
+
 ## Pull Requests
 
 * Write "WIP" on your PR if submitting working yet unfinished code.
