@@ -19,7 +19,7 @@ If you do not care to follow these rules, your contribution will be closed.
 * Follow the [PEP 8 style guide for python code](https://www.python.org/dev/peps/pep-0008/)
 * Do one commit for each modification/addition/improvement
 * Use explicit commit messages
-* License your code as GPLv3 clause
+* License your code as `Apache 2.0` clause
 * Always start a new module using the [owfmodules.skeleton](https://github.com/immunIT/owfmodules.skeleton/) base repository
 
 ## Creating a new module
