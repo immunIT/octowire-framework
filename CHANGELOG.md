@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2021-01-15
+
+### Added
+
+## Changed
+
+- Modules import "octowire" when "octowire-lib" dependency is processed
+
 ## [1.2.1] - 2021-01-07
 
 ### Added

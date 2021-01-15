@@ -67,7 +67,10 @@ class AModule(ABC):
                 self.logger.handle(update_msg, self.logger.USER_INTERACT)
                 return False
             # Recursively check sub_module dependencies
-            sub_module = import_module(req.name)
+            if req.name == "octowire-lib":
+                sub_module = import_module("octowire")
+            else:
+                sub_module = import_module(req.name)
             for d_amodule_class in get_amodule_class(sub_module, req.name, AModule):
                 amodule_class = d_amodule_class["class"](load_config())
                 if not amodule_class._check_dependencies():
