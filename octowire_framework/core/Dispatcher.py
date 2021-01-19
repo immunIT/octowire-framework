@@ -14,6 +14,7 @@ import shutil
 import subprocess
 from octowire_framework.core.commands.back import back
 from octowire_framework.core.commands.detect import detect
+from octowire_framework.core.commands.fwupdate import fwupdate
 from octowire_framework.core.commands.help import owf_help
 from octowire_framework.core.commands.miniterm import miniterm
 from octowire_framework.core.commands.run import run_module
@@ -50,6 +51,7 @@ class Dispatcher:
             "save": {"descr": "Save the current config into owf.cfg file", "run": save_config, "arguments": {}},
             "detect": {"descr": "Try to automatically detect the Octowire port", "run": detect, "arguments": {}},
             "miniterm": {"descr": "Open a miniterm serial console", "run": miniterm, "arguments": {}},
+            "fwupdate": {"descr": "Update the Octowire firmware", "run": fwupdate, "arguments": {}},
             "exit": {"descr": "Exit the console", "run": owf_exit, "arguments": {}}
         }
         self.is_windows_powershell = False
@@ -78,7 +80,7 @@ class Dispatcher:
                 subprocess.run([user_input], shell=True)
         else:
             # Run system command using the current shell
-            subprocess.run([user_input], shell=True, executable=self.parent_process)
+            subprocess.run([user_input], shell=True)
 
     def handle(self, owf_instance, user_input):
         """
