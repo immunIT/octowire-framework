@@ -58,7 +58,7 @@ def write_flash(octowire_ser, fw):
         octowire_ser.write(bytes("w%s,%s\n" % (hex(addr)[2:], chunk.hex()), "ascii"))
         res = octowire_ser.readline().strip().decode()
         if res.startswith("ERROR"):
-            Logger().handle("An Error occurred during the erase process. Exiting...", Logger.ERROR)
+            Logger().handle("An Error occurred during the write process. Exiting...", Logger.ERROR)
             return False
         addr += len(chunk)
     return True
@@ -94,24 +94,23 @@ def _is_octowire_in_bootloader():
     ports_list = list_ports.comports(include_links=True)
     for port in ports_list:
         if port.vid == 0xc0de and port.pid == 0xb007:
-            Logger().handle("Octowire found in bootloader mode.", Logger.SUCCESS)
+            Logger().handle("Octowire detected in bootloader mode.", Logger.SUCCESS)
             return port.device
         elif port.vid == 0xc0de and port.pid == 0x0c70:
-            Logger().handle("The Octowire can only be flashed when in 'bootloader' mode.", Logger.ERROR)
-            Logger().handle("To enter bootloader mode follow the method described below:\n"
-                            "   1. With the board already powered on, press and maintain the 'User' button\n"
-                            "   2. Press the 'Reset' button while keeping the User button pressed, "
-                            "until the activity LED (blue) lights up\n"
-                            "   3. Press enter to retry", Logger.USER_INTERACT)
+            Logger().handle("Please enter bootloader mode on the Octowire.", Logger.ERROR)
+            Logger().handle("Follow the steps below:\n"
+                            "   1. Press and maintain the 'User' button on the Octowire\n"
+                            "   2. Press the 'Reset' button while keeping 'User' pressed until the blue LED lights up\n"
+                            "   3. Press enter on your keyboard", Logger.USER_INTERACT)
             return None
-    Logger().handle("Octowire not found. Please ensure the Octowire is properly plugged into your computer and run the "
-                    "command again.", Logger.ERROR)
+    Logger().handle("Octowire was not detected. Please ensure the Octowire is properly plugged into your computer and "
+                    "try again.", Logger.ERROR)
     return None
 
 
 def _get_latest_firmware_version():
     """
-    Return the latest released version of the Octowire framework.
+    Return the latest released version of the Octowire firmware.
     :return: String
     """
     firmware_release_url = 'https://api.bitbucket.org/2.0/repositories/octowire/octowire-firmware-releases/' \
@@ -125,26 +124,25 @@ def _get_latest_firmware_version():
             Logger().handle('No release found for the Octowire firmware', Logger.ERROR)
             return None
     elif resp.status_code == 429:
-        Logger().handle("API rate limiting reached, please try updating again later.", Logger.ERROR)
+        Logger().handle("API rate limit reached, please try updating again later.", Logger.ERROR)
         return None
     else:
-        Logger().handle('Unable to get the latest firmware released version', Logger.ERROR)
+        Logger().handle('Unable to get the latest firmware version', Logger.ERROR)
         return None
 
 
 def _print_bootloader_instruction():
-    Logger().handle("The Octowire can only be flashed when in 'bootloader' mode. To enter bootloader mode "
-                    "follow the method described below:\n"
-                    "   1. With the board already powered on, press and maintain the 'User' button\n"
-                    "   2. Press the 'Reset' button while keeping the User button pressed, "
-                    "until the activity LED (blue) lights up\n"
-                    "   3. Press enter to continue", Logger.USER_INTERACT)
+    Logger().handle("The Octowire must now be placed in 'bootloader' mode. Follow the steps below to enter bootloader "
+                    "mode:\n"
+                    "   1. Press and maintain the 'User' button on the Octowire\n"
+                    "   2. Press the 'Reset' button while keeping 'User' pressed until the blue LED lights up\n"
+                    "   3. Press enter on your keyboard to continue", Logger.USER_INTERACT)
 
 
 def _download_release(firmware_version):
     """
-    Download the latest release of a package (module or framework).
-    :param firmware_version: The latest firmware version number.
+    Download a firmware release.
+    :param firmware_version: The firmware version number.
     :return: Filename or None.
     """
     Logger().handle(f"Downloading 'octowire-firmware' v{firmware_version}...", Logger.INFO)
@@ -156,7 +154,7 @@ def _download_release(firmware_version):
         file.close()
         return file.name
     else:
-        Logger().handle("failed to download the latest firmware release - HTTP response code: {}"
+        Logger().handle("failed to download firmware - HTTP response code: {}"
                         .format(resp.status_code), Logger.ERROR)
     return None
 
@@ -182,7 +180,7 @@ def _manage_install(octowire_ser, firmware_version):
         try:
             fw = open(firmware_path, "rb").read()
         except FileNotFoundError:
-            print(f"{Colors.FAIL}The file {firmware_path} does not exist. Exiting...{Colors.ENDC}")
+            print(f"{Colors.FAIL}File {firmware_path} does not exist. Exiting...{Colors.ENDC}")
             return False
         # Flash process (erase, write and verify firmware image)
         if erase_flash(octowire_ser, fw):
@@ -218,18 +216,18 @@ def _update_process(firmware_version):
 def fwupdate(owf_instance, *args):
     """
     Download and install the latest Octowire firmware.
-    This command automatically detect the octowire.
+    This command automatically detects the Octowire.
     :param owf_instance: Octowire framework instance (self).
     :param args: Varargs command options.
     :return: Nothing
     """
-    Logger().handle("Attempting to find the Octowire...", Logger.HEADER)
+    Logger().handle("Attempting to detect Octowire...", Logger.HEADER)
     s_octowire = detect_and_connect()
     if s_octowire is not None:
-        Logger().handle("Recovering the actual firmware version...")
-        # Instantiate the Octowire instance
+        Logger().handle("Identifying currently installed firmware version...")
+        # Instantiate the Octowire
         octowire_instance = Octowire(serial_instance=s_octowire)
-        # Recovering the actual firmware version
+        # Get the current firmware version
         current_version = pkg_resources.parse_version(octowire_instance.get_octowire_version().split()[1])
         if current_version:
             latest_version = _get_latest_firmware_version()
@@ -238,17 +236,16 @@ def fwupdate(owf_instance, *args):
                 if latest_version > current_version:
                     Logger().handle(f"A new firmware version is available ({current_version} -> {latest_version})",
                                     Logger.RESULT)
-                    res = prompt("Do you want to continue? [Y/n]:")
+                    res = prompt("Do you wish to proceed with update? [Y/n]:")
                     if res.upper() == "Y" or res == "":
                         _update_process(latest_version)
                 else:
-                    Logger().handle(f"The latest firmware revision is already installed.", Logger.WARNING)
-                    res = prompt("Do you want to continue the installation anyway? [y/N]:")
+                    Logger().handle(f"The latest firmware version is already installed.", Logger.WARNING)
+                    res = prompt("Do you wish to re-install it? [y/N]:")
                     if res.upper() == "Y":
                         _update_process(latest_version)
             else:
                 Logger().handle("Unable to get the latest firmware version.")
         else:
-            Logger().handle("Unable to get the current Octowire version, please press the reset button and retry...",
+            Logger().handle("Unable to get the current Octowire version, please press the Reset button and retry...",
                             Logger.ERROR)
-

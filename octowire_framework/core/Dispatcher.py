@@ -53,7 +53,7 @@ class Dispatcher:
             "detect": {"descr": "Try to automatically detect the Octowire port", "run": detect, "arguments": {}},
             "miniterm": {"descr": "Open a miniterm serial console", "run": miniterm, "arguments": {}},
             "fwupdate": {"descr": "Update the Octowire firmware", "run": fwupdate, "arguments": {}},
-            "version": {"descr": "Displays Framework, Library and Firmware version", "run": version, "arguments": {}},
+            "version": {"descr": "Display Framework, Library and Firmware versions", "run": version, "arguments": {}},
             "exit": {"descr": "Exit the console", "run": owf_exit, "arguments": {}}
         }
         self.is_windows_powershell = False

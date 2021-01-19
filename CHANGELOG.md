@@ -6,9 +6,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Adding the `fwupdate` command to upgrade the Octowire firmware
-- Adding the version in on the show modules output
-- Implementing the 'version' command which displays framework, library and firmware version
+- Added the `fwupdate` command to upgrade the Octowire firmware
+- Added the version in the show modules output
+- Implemented the 'version' command which displays framework, library and firmware versions
 
 ## Changed
 

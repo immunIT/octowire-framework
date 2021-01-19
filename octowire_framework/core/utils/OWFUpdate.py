@@ -83,7 +83,7 @@ class OWFUpdate:
                 else:
                     break
             elif resp.status_code == 429:
-                self.logger.handle("API rate limiting reached, please try updating again later.", self.logger.ERROR)
+                self.logger.handle("API rate limit reached, please try updating again later.", self.logger.ERROR)
                 break
             else:
                 self.logger.handle("failed to load module list - HTTP response code: {}".format(resp.status_code),
@@ -109,7 +109,7 @@ class OWFUpdate:
                 self.logger.handle('No release found for the Octowire framework', Logger.ERROR)
                 return None
         else:
-            self.logger.handle('Unable to get the latest framework released version', Logger.ERROR)
+            self.logger.handle('Unable to get the latest framework release', Logger.ERROR)
             return None
 
     def _get_latest_library_version(self):
@@ -128,7 +128,7 @@ class OWFUpdate:
                 self.logger.handle('No release found for the octowire-lib package', Logger.ERROR)
                 return None
         else:
-            self.logger.handle('Unable to get the latest octowire-lib released version', Logger.ERROR)
+            self.logger.handle('Unable to get the latest octowire-lib release', Logger.ERROR)
             return None
 
     @staticmethod
