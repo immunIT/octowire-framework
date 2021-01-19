@@ -70,7 +70,8 @@ def show(owf_instance, *args):
                 for module in owf_instance.modules:
                     if args[1] == module["path"].split("/")[0]:
                         formatted_modules.append({"Path": module["path"],
-                                                  "Description": module["class"](owf_instance.config).meta["description"]})
+                                                  "Description": module["class"](owf_instance.config).meta["description"],
+                                                  "Version": module["class"](owf_instance.config).meta["version"]})
                 if len(formatted_modules) == 0:
                     owf_instance.logger.handle(f"No module found in the '{args[1]}' category.",
                                                owf_instance.logger.ERROR)
@@ -79,9 +80,10 @@ def show(owf_instance, *args):
             except IndexError:
                 for module in owf_instance.modules:
                     formatted_modules.append({"Path": module["path"],
-                                              "Description": module["class"](owf_instance.config).meta["description"]})
-            owf_instance.logger.print_tabulate(formatted_modules,
-                                               headers={"Path": "Path", "Description": "Description"})
+                                              "Description": module["class"](owf_instance.config).meta["description"],
+                                              "Version": module["class"](owf_instance.config).meta["version"]})
+            owf_instance.logger.print_tabulate(formatted_modules, headers={"Path": "Path", "Description": "Description",
+                                                                           "Version": "Version"})
         elif args[0] == "config":
             print("\n================")
             print("|    Config    |")
