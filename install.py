@@ -8,7 +8,6 @@
 
 
 import ctypes
-import errno
 import os
 import pkg_resources
 import platform
@@ -17,6 +16,7 @@ import requests
 import subprocess
 import sys
 import tarfile
+import tempfile
 
 
 from octowire.utils.Logger import Logger
@@ -82,14 +82,9 @@ def download_release(tarball_url):
     print("Downloading the latest octowire-framework release...")
     resp = requests.get(tarball_url, stream=True)
     if resp.status_code == 200:
-        filename = '/tmp/octowire-framework/{}'.format(get_filename_from_cd(resp.headers.get('content-disposition')))
-        if not os.path.exists(os.path.dirname(filename)):
-            try:
-                os.makedirs(os.path.dirname(filename))
-            except OSError as exc:
-                if exc.errno != errno.EEXIST:
-                    raise
-        with open(filename, 'wb') as f:
+        tmpdir = tempfile.gettempdir()
+        filename = tmpdir + f"/{get_filename_from_cd(resp.headers.get('content-disposition'))}"
+        with open(filename, "wb") as f:
             f.write(resp.content)
         return filename
     else:
@@ -160,12 +155,15 @@ def manage_install():
     else:
         release_tarball_url = f"{bitbucket_download_url.format('octowire-framework', _get_latest_framework_version())}"
         tarball_filename = download_release(release_tarball_url)
+        print(tarball_filename)
         if tarball_filename:
             print("[*] Extracting the tarball archive...")
             setup_dir = extract_tarball(tarball_filename)
+            package_dir = setup_dir.split("/")[-1]
+            setup_dir = '/'.join(setup_dir.split("/")[:-1])
             print("[*] Installing the octowire-framework package...")
-            pipes = subprocess.Popen([python_path, 'setup.py', 'install'], stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE, cwd=setup_dir)
+            pipes = subprocess.Popen([python_path, '-m', 'pip', 'install', '--upgrade', f"./{package_dir}"],
+                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=setup_dir)
             stdout, stderr = pipes.communicate()
             if pipes.returncode != 0:
                 print("{}[X]{} Error while installing the octowire-framework package: {}\n"

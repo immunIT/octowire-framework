@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2021-01-18
+
+### Added
+
+- Adding the `fwupdate` command to upgrade the Octowire firmware
+- Adding the version in on the show modules output
+- Implementing the 'version' command which displays framework, library and firmware version
+
+## Changed
+
+- Improve Linux commands running
+- Improve installation and update process (properly delete previous version)
+
 ## [1.2.2] - 2021-01-15
 
 ### Added

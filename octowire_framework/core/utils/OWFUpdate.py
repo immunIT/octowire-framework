@@ -7,6 +7,7 @@
 # Jordan Ovrè / Ghecko <jovre@immunit.ch>
 
 
+import collections
 import inspect
 import os
 import pathlib
@@ -81,6 +82,9 @@ class OWFUpdate:
                     resp = requests.get('{}'.format(resp.json()["next"]))
                 else:
                     break
+            elif resp.status_code == 429:
+                self.logger.handle("API rate limiting reached, please try updating again later.", self.logger.ERROR)
+                break
             else:
                 self.logger.handle("failed to load module list - HTTP response code: {}".format(resp.status_code),
                                    self.logger.ERROR)
@@ -106,6 +110,25 @@ class OWFUpdate:
                 return None
         else:
             self.logger.handle('Unable to get the latest framework released version', Logger.ERROR)
+            return None
+
+    def _get_latest_library_version(self):
+        """
+        Return the latest release version of the Octowire-lib package.
+        :return: String
+        """
+        pypi_api_url = 'https://pypi.org/pypi/octowire-lib/json'
+        resp = requests.get(pypi_api_url)
+        if resp.status_code == 200:
+            releases = collections.OrderedDict(sorted(resp.json()["releases"].items()))
+            latest_release_version = list(releases.keys())[-1]
+            if latest_release_version:
+                return latest_release_version
+            else:
+                self.logger.handle('No release found for the octowire-lib package', Logger.ERROR)
+                return None
+        else:
+            self.logger.handle('Unable to get the latest octowire-lib released version', Logger.ERROR)
             return None
 
     @staticmethod
@@ -167,10 +190,12 @@ class OWFUpdate:
         python_path = sys.executable
         if filename:
             setup_dir = self._extract_tarball(filename)
+            package_dir = setup_dir.split("/")[-1]
+            setup_dir = '/'.join(setup_dir.split("/")[:-1])
             try:
                 if package_name != "octowire-framework":
-                    pipes = subprocess.Popen([python_path, 'setup.py', 'install'], cwd=setup_dir,
-                                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    pipes = subprocess.Popen([python_path, '-m', 'pip', 'install', '--upgrade', f"./{package_dir}"],
+                                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=setup_dir)
                     stdout, stderr = pipes.communicate()
                     if pipes.returncode != 0:
                         self.logger.handle("Error while installing {} package: {}".format(package_name, stderr.strip()),
@@ -220,15 +245,44 @@ class OWFUpdate:
                 current_version = pkg_resources.parse_version(
                     pkg_resources.get_distribution('octowire-framework').version)
             except pkg_resources.DistributionNotFound:
-                current_version = ''
+                current_version = pkg_resources.parse_version('')
             if latest_release_version > current_version:
                 self.logger.handle('A new framework release is available, running update...', Logger.INFO)
                 if not self._manage_install('octowire-framework', latest_release_version.base_version):
                     self.not_updated.append('octowire-framework')
             else:
-                self.logger.handle('Octowire framework is up-to-date', Logger.SUCCESS)
+                self.logger.handle('Octowire framework is already up-to-date', Logger.SUCCESS)
         else:
             self.not_updated.append('octowire-framework')
+
+    def _update_library(self):
+        """
+        This function updates the octowire-lib package.
+        :return: Nothing
+        """
+        python_path = sys.executable
+        latest_release_version = self._get_latest_library_version()
+        if latest_release_version:
+            latest_release_version = pkg_resources.parse_version(latest_release_version)
+            try:
+                current_version = pkg_resources.parse_version(pkg_resources.get_distribution('octowire-lib').version)
+            except pkg_resources.DistributionNotFound:
+                current_version = pkg_resources.parse_version('')
+            if latest_release_version > current_version:
+                self.logger.handle('A new octowire-lib release is available, running update...', Logger.INFO)
+                pipes = subprocess.Popen([python_path, '-m', 'pip', 'install', '--upgrade', 'octowire-lib'],
+                                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout, stderr = pipes.communicate()
+                if pipes.returncode != 0:
+                    self.logger.handle("Error while installing the octowire-lib package: {}".format(stderr.strip()),
+                                       Logger.ERROR)
+                    self.not_updated.append('octowire-lib')
+                else:
+                    self.logger.handle("'octowire-lib' successfully installed", Logger.SUCCESS)
+            else:
+                self.logger.handle('Octowire library is already up-to-date', Logger.SUCCESS)
+        else:
+            self.not_updated.append('octowire-lib')
 
     def update(self, update_framework=None):
         """
@@ -264,6 +318,8 @@ class OWFUpdate:
                 self.logger.handle("Unable to update/install the following package(s):", Logger.ERROR)
                 for module in self.not_updated:
                     print(" - {}".format(module))
+            # Update the octowire-lib package
+            self._update_library()
             if update_framework:
                 self._update_framework()
         except requests.exceptions.ConnectionError:
