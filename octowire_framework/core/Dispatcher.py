@@ -27,6 +27,7 @@ from octowire_framework.core.commands.show import show
 from octowire_framework.core.commands.unset_globals import unset_globals
 from octowire_framework.core.commands.unset_options import unset_options
 from octowire_framework.core.commands.use import use
+from octowire_framework.core.commands.version import version
 from octowire_framework.core.commands.quit import owf_exit
 
 
@@ -52,6 +53,7 @@ class Dispatcher:
             "detect": {"descr": "Try to automatically detect the Octowire port", "run": detect, "arguments": {}},
             "miniterm": {"descr": "Open a miniterm serial console", "run": miniterm, "arguments": {}},
             "fwupdate": {"descr": "Update the Octowire firmware", "run": fwupdate, "arguments": {}},
+            "version": {"descr": "Displays Framework, Library and Firmware version", "run": version, "arguments": {}},
             "exit": {"descr": "Exit the console", "run": owf_exit, "arguments": {}}
         }
         self.is_windows_powershell = False
